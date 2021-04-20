@@ -88,8 +88,9 @@ function animate(timestamp) {
         timer = timeInSeconds;
         //console.log(timer);
         var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-        for(var j = 0; j < spawner.length; j++) {
+        for(var j = 0; j < spawner.length - 1; ++j) {
             currentIndex = spawner[j][0][0];
+            console.log(currentIndex);
             obstacles[currentIndex].enterScene(spawner[j][0][1]);
         }
         
