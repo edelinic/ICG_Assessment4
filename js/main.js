@@ -6,6 +6,11 @@ import * as Obstacles from './obstacles.js';
 console.log(Player.double(5));
 
 let camera, scene, renderer;
+const obstacleCount = 15;
+var obstacles = [];
+var timer = 0;
+var speed = 0.5; // in seconds
+var currentIndex = 0;
 
 function init() {
 	// Init scene
@@ -30,14 +35,46 @@ function init() {
 
     // Create PlaneGeometry
     const planeGeometry = new THREE.PlaneGeometry(200, 200, 32);
-    const planeMaterial = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+    const planeMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.rotation.x = Math.PI / 2;
     plane.position.set(0,-4,0);
     scene.add(plane);
     
     // Create obstacles
-    scene.add(Obstacles.init(0));
+    //scene.add(Obstacles.init(0));
+    for(var i = 0; i < obstacleCount; i++) {
+        console.log(i);
+        obstacles[i] = new Obstacles.Obstacle(i);
+        scene.add(obstacles[i].init());
+    }
+
+    // obstacles[0].setPosition(-5, -1, -55);
+    // obstacles[1].setPosition(5, -1, -45);
+    // obstacles[2].setPosition(0, -1, -35);
+    //obstacles[1].remove();
+    //obstacles[0].enterScene(0);
+
+    // var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
+    // for(var j = 0; j < spawner.length; j++) {
+    //     currentIndex = spawner[j][0][0];
+    //     obstacles[currentIndex].enterScene(spawner[j][0][1]);
+    // }
+
+
+    // Create player
+
+
+    // Lighting
+	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+	scene.add(light);
+	
+	const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	scene.add(directionalLight);
+
+	var cameralight = new THREE.PointLight( new THREE.Color(1,1,1), 0.5 );
+	camera.add(cameralight);
+	scene.add(camera);
 
 	// Position camera
 	camera.position.z = 15;
@@ -45,12 +82,28 @@ function init() {
 }
 
 // Draw the scene every time the screen is refreshed
-function animate() {
-	requestAnimationFrame(animate);
-
-    Obstacles.animate();
+function animate(timestamp) {
+    let timeInSeconds = timestamp / 1000;
+    if (timeInSeconds - timer >= speed) {
+        timer = timeInSeconds;
+        //console.log(timer);
+        var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
+        for(var j = 0; j < spawner.length - 1; ++j) {
+            currentIndex = spawner[j][0][0];
+            console.log(currentIndex);
+            obstacles[currentIndex].enterScene(spawner[j][0][1]);
+        }
+        
+    }
+    for(var i = 0; i < obstacleCount; i++) {
+        obstacles[i].animate();
+        if(obstacles[i].currentPosition() > 15) {
+            obstacles[i].remove();
+        }
+    }
 	
 	renderer.render(scene, camera);
+    requestAnimationFrame(animate);
 }
 
 function onWindowResize() {
