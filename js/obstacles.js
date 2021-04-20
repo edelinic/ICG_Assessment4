@@ -27,7 +27,7 @@ export class Obstacle {
         this.obstacle.position.z += speed;
         if(this.obstacle.position.z > 15) {
             this.remove();
-            console.log(this.index + ' has been binned...');
+            //console.log(this.index + ' has been binned...');
         }
     }
 
@@ -48,13 +48,13 @@ export class Obstacle {
         this.onScreen = false;
     }
 
-    enterScene() {
+    enterScene(lane = 0) {
         if(this.onScreen != true) {
-            this.obstacle.position.x = lanes[Utils.randomInt(0, 2)];
+            this.obstacle.position.x = lanes[lane];
             this.obstacle.position.y = -1;
             this.obstacle.position.z = -55; 
             this.onScreen = true;
-            //console.log(this.index + ' has entered the scene...');
+            //console.log(this.index + ' has entered the scene in lane: ' + lane);
         }
     }
 
@@ -72,4 +72,34 @@ export class Obstacle {
     currentLane() {
         return this.obstacle.x;
     }
+}
+
+export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
+    var data = [];
+    var lanesTaken = [];
+    var amountOfObstacles = Utils.randomInt(0, maxPerRow);
+    while(lanesTaken.length < maxPerRow){
+        var lane = Utils.randomInt(0, 2);
+        if(lanesTaken.indexOf(lane) === -1) {
+            lanesTaken.push(lane);
+        }
+    }
+
+    //console.log("--------rows created: " + amountOfObstacles);
+    for(var i = 0; i < amountOfObstacles; i++) {
+        var entry = [];
+
+        if(newIndex >= maxObstacleIndex - 1) {
+            newIndex = 0;
+        } else {
+            var newIndex = currentIndex + i;
+        }
+    
+        lane = lanesTaken[i];
+
+        entry.push(newIndex, lane);
+        data.push([entry]);
+        //console.log("currentIndex: " + newIndex + " lane: " + lane);
+    }
+    return data;
 }

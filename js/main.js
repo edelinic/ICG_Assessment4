@@ -6,8 +6,11 @@ import * as Obstacles from './obstacles.js';
 console.log(Player.double(5));
 
 let camera, scene, renderer;
-const obstacleCount = 10;
+const obstacleCount = 15;
 var obstacles = [];
+var timer = 0;
+var speed = 0.5; // in seconds
+var currentIndex = 0;
 
 function init() {
 	// Init scene
@@ -50,7 +53,14 @@ function init() {
     // obstacles[1].setPosition(5, -1, -45);
     // obstacles[2].setPosition(0, -1, -35);
     //obstacles[1].remove();
-    obstacles[0].enterScene();
+    //obstacles[0].enterScene(0);
+
+    // var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
+    // for(var j = 0; j < spawner.length; j++) {
+    //     currentIndex = spawner[j][0][0];
+    //     obstacles[currentIndex].enterScene(spawner[j][0][1]);
+    // }
+
 
     // Create player
 
@@ -72,25 +82,43 @@ function init() {
 }
 
 // Draw the scene every time the screen is refreshed
-function animate() {
-	requestAnimationFrame(animate);
-
-    //Obstacles.animate();
+function animate(timestamp) {
+    let timeInSeconds = timestamp / 1000;
+    if (timeInSeconds - timer >= speed) {
+        timer = timeInSeconds;
+        //console.log(timer);
+        var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
+        for(var j = 0; j < spawner.length; j++) {
+            currentIndex = spawner[j][0][0];
+            obstacles[currentIndex].enterScene(spawner[j][0][1]);
+        }
+        
+    }
     for(var i = 0; i < obstacleCount; i++) {
-        if(obstacles[i].isOnScreen() === true) {
-            obstacles[i].animate();
-            if(obstacles[i].currentPosition() > -30) {
-                if(i < obstacleCount - 1) {
-                    obstacles[i + 1].enterScene();
-                } else {
-                    i = 0;
-                    obstacles[i].enterScene();
-                }
-            }
+        obstacles[i].animate();
+        if(obstacles[i].currentPosition() > 15) {
+            obstacles[i].remove();
         }
     }
+
+    //Obstacles.animate();
+    // add possibility for more than one block to appear in a row
+    // for(var i = 0; i < obstacleCount; i++) {
+    //     if(obstacles[i].isOnScreen() === true) {
+    //         obstacles[i].animate();
+    //         if(obstacles[i].currentPosition() > -30) {
+    //             if(i < obstacleCount - 1) {
+    //                 obstacles[i + 1].enterScene();
+    //             } else {
+    //                 i = 0;
+    //                 obstacles[i].enterScene();
+    //             }
+    //         }
+    //     }
+    // }
 	
 	renderer.render(scene, camera);
+    requestAnimationFrame(animate);
 }
 
 function onWindowResize() {
