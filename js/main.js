@@ -100,22 +100,6 @@ function animate(timestamp) {
             obstacles[i].remove();
         }
     }
-
-    //Obstacles.animate();
-    // add possibility for more than one block to appear in a row
-    // for(var i = 0; i < obstacleCount; i++) {
-    //     if(obstacles[i].isOnScreen() === true) {
-    //         obstacles[i].animate();
-    //         if(obstacles[i].currentPosition() > -30) {
-    //             if(i < obstacleCount - 1) {
-    //                 obstacles[i + 1].enterScene();
-    //             } else {
-    //                 i = 0;
-    //                 obstacles[i].enterScene();
-    //             }
-    //         }
-    //     }
-    // }
 	
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
