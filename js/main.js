@@ -8,6 +8,7 @@ console.log(Player.double(5));
 let camera, scene, renderer;
 const obstacleCount = 15;
 var obstacles = [];
+var player = null;
 var timer = 0;
 var speed = 0.5; // in seconds
 var currentIndex = 0;
@@ -63,7 +64,8 @@ function init() {
 
 
     // Create player
-
+	player = new Player;
+	player.init();
 
     // Lighting
 	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
