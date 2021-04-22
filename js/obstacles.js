@@ -54,7 +54,7 @@ export class Obstacle {
             this.obstacle.position.y = -1;
             this.obstacle.position.z = -55; 
             this.onScreen = true;
-            console.log(this.index + ' has entered the scene in lane: ' + lane);
+            //console.log(this.index + ' has entered the scene in lane: ' + lane);
         }
     }
 
@@ -78,6 +78,8 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
     var data = [];
     var lanesTaken = [];
     var amountOfObstacles = Utils.randomInt(0, maxPerRow);
+    var newIndex = currentIndex;
+    console.log('amount of obstacles to create: ' + amountOfObstacles);
     while(lanesTaken.length < maxPerRow){
         var lane = Utils.randomInt(0, 2);
         if(lanesTaken.indexOf(lane) === -1) {
@@ -89,10 +91,10 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
     for(var i = 0; i < amountOfObstacles; i++) {
         var entry = [];
 
-        if(newIndex >= maxObstacleIndex - 1) {
+        if(newIndex > maxObstacleIndex - 2) {
             newIndex = 0;
         } else {
-            var newIndex = currentIndex + i;
+            newIndex = newIndex + i;
         }
     
         lane = lanesTaken[i];
