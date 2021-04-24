@@ -2,9 +2,7 @@ import * as Player from './player.js';
 import * as Obstacles from './obstacles.js';
 // To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
 
-
-console.log(Player.double(5));
-
+//Global Variables
 let camera, scene, renderer;
 const obstacleCount = 15;
 var obstacles = [];
@@ -12,6 +10,10 @@ var player = null;
 var timer = 0;
 var speed = 0.5; // in seconds
 var currentIndex = 0;
+var laneWidth = 5;
+var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
+var startingPos = 0;
+var printingPos = 0;
 
 function init() {
 	// Init scene
@@ -45,7 +47,6 @@ function init() {
     // Create obstacles
     //scene.add(Obstacles.init(0));
     for(var i = 0; i < obstacleCount; i++) {
-        console.log(i);
         obstacles[i] = new Obstacles.Obstacle(i);
         scene.add(obstacles[i].init());
     }
@@ -63,9 +64,53 @@ function init() {
     // }
 
 
-    // Create player
-	player = new Player;
+    // Player and Controls
+    //Player Init
+	player = new Player.Player(lanes);
 	player.init();
+    player.setPosition(0, -1, 10);
+    scene.add(player.mesh);
+
+    //add Event Listener for Keys
+    var onKeyDown = function ( event ) {
+
+        switch ( event.keyCode ) {
+
+            case 37: // left
+            case 65: // a
+                if (player.getLane() != 0) {        //do not move if already in left lane
+                    console.log("Current Lane: " +  player.getLane());
+                    player.setLane(player.getLane() - 1);
+
+                    var position = { x: startingPos};
+                    var target = { x: 1000};
+
+                    var tween = new TWEEN.Tween(position)
+					.to(target, 2000)
+					.onUpdate(function () {
+                        printingPos = position.x; 
+					})
+					.start()
+
+                }
+            break;
+
+            case 39: // right
+            case 68: // d
+            if (player.getLane() != 2) {        //do not move if already in right lane
+                console.log("Current Lane: " +  player.getLane());
+
+                player.setLane(player.getLane() + 1);
+
+
+
+            }
+                break;
+        }
+
+    };
+
+    document.addEventListener( "keydown" , onKeyDown, false );
 
     // Lighting
 	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -88,11 +133,9 @@ function animate(timestamp) {
     let timeInSeconds = timestamp / 1000;
     if (timeInSeconds - timer >= speed) {
         timer = timeInSeconds;
-        //console.log(timer);
         var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
         for(var j = 0; j < spawner.length - 1; ++j) {
             currentIndex = spawner[j][0][0];
-            console.log(currentIndex);
             obstacles[currentIndex].enterScene(spawner[j][0][1]);
         }
         
@@ -106,6 +149,8 @@ function animate(timestamp) {
 	
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
+    TWEEN.update();
+    console.log("current Position of tween: " + printingPos);
 }
 
 function onWindowResize() {

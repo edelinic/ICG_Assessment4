@@ -54,7 +54,7 @@ export class Obstacle {
             this.obstacle.position.y = -1;
             this.obstacle.position.z = -55; 
             this.onScreen = true;
-            console.log(this.index + ' has entered the scene in lane: ' + lane);
+            //console.log(this.index + ' has entered the scene in lane: ' + lane);
         }
     }
 
