@@ -12,8 +12,6 @@ var speed = 0.5; // in seconds
 var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
-var startingPos = 0;
-var printingPos = 0;
 
 function init() {
 	// Init scene
@@ -78,32 +76,19 @@ function init() {
 
             case 37: // left
             case 65: // a
-                if (player.getLane() != 0) {        //do not move if already in left lane
-                    console.log("Current Lane: " +  player.getLane());
-                    player.setLane(player.getLane() - 1);
-
-                    var position = { x: startingPos};
-                    var target = { x: 1000};
-
-                    var tween = new TWEEN.Tween(position)
-					.to(target, 2000)
-					.onUpdate(function () {
-                        printingPos = position.x; 
-					})
-					.start()
-
+                if (TWEEN.getAll().length == 0){        //wait for current tween to complete to not allow double input
+                    if (player.getLane() != 0) {        //do not move if already in left lane
+                        player.setLane(player.getLane() - 1);
+                    }
                 }
             break;
 
             case 39: // right
             case 68: // d
-            if (player.getLane() != 2) {        //do not move if already in right lane
-                console.log("Current Lane: " +  player.getLane());
-
-                player.setLane(player.getLane() + 1);
-
-
-
+            if (TWEEN.getAll().length == 0){
+                if (player.getLane() != 2) {        //do not move if already in right lane
+                    player.setLane(player.getLane() + 1);    
+                }
             }
                 break;
         }
@@ -150,7 +135,6 @@ function animate(timestamp) {
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
     TWEEN.update();
-    console.log("current Position of tween: " + printingPos);
 }
 
 function onWindowResize() {

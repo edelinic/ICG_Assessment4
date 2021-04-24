@@ -1,4 +1,4 @@
-var speed = 500;
+import * as TweenHelper from './tween.helper.js';
 
 export class Player {
     constructor(lanes) {
@@ -25,13 +25,21 @@ export class Player {
     setXPosition(x){
         this.mesh.position.x = x;
     }
-    getXPosition(x){ return this.mesh.position.x;}
+    getXPosition() { return this.mesh.position.x;}
+    getYPosition() { return this.mesh.position.y;}
+    getZPosition() { return this.mesh.position.z;}
 
-    setLane(lane) {
-        this.lane = lane; 
-        console.log("player current lane: " + this.getLane());
-        //this.setXPosition(this.lanes[lane]);
+    setLane(targetLane) {
+        var target = new THREE.Vector3(this.lanes[targetLane], this.mesh.position.y, this.mesh.position.z); // create on init
+        TweenHelper.animateVector3(this.mesh.position, target, {
+        duration: 250
+    });
+
+    //change lane 
+    this.lane = targetLane; 
+
     }
+
     getLane() { return this.lane; }
 
 }
