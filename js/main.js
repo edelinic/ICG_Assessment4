@@ -1,5 +1,6 @@
 import * as Player from './player.js';
 import * as Obstacles from './obstacles.js';
+import * as Utils from './utils.js';
 // To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
 
 //Global Variables
@@ -91,6 +92,14 @@ function init() {
                 }
             }
                 break;
+
+            case 33: //up
+            case 87: // w
+            if (TWEEN.getAll().length == 0){
+                player.jump(5);
+            }
+
+
         }
 
     };
@@ -113,14 +122,20 @@ function init() {
     camera.position.y = 3;
 }
 
+speed = 0.75;
+
 // Draw the scene every time the screen is refreshed
 function animate(timestamp) {
     let timeInSeconds = timestamp / 1000;
     if (timeInSeconds - timer >= speed) {
         timer = timeInSeconds;
         var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-        for(var j = 0; j < spawner.length - 1; ++j) {
-            currentIndex = spawner[j][0][0];
+        //console.log(spawner);
+        for(var j = 0; j < spawner.length; j++) {
+            console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
+            currentIndex = spawner[j][0][0] + 1;
+            if(currentIndex > 14) { currentIndex = 0; }
+            // console.log(currentIndex);
             obstacles[currentIndex].enterScene(spawner[j][0][1]);
         }
         

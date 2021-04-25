@@ -32,12 +32,33 @@ export class Player {
     setLane(targetLane) {
         var target = new THREE.Vector3(this.lanes[targetLane], this.mesh.position.y, this.mesh.position.z); // create on init
         TweenHelper.animateVector3(this.mesh.position, target, {
-        duration: 250
-    });
+            duration: 250
+        });
+        //change lane 
+        this.lane = targetLane; 
+    }
 
-    //change lane 
-    this.lane = targetLane; 
+    jump(jumpHeight) {
+        var from = new THREE.Vector3(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z); //curent position
+        var to = new THREE.Vector3(this.mesh.position.x, jumpHeight, this.mesh.position.z); //y value changed to jump height
+ 
+        var duration = 300;                    //tween duration: 0.3s
 
+        // create tween to jump up
+        var tweenJump = new TWEEN.Tween(this.mesh.position)
+            .to({ x: to.x, y: to.y, z: to.z, }, duration)
+            .easing(TWEEN.Easing.Circular.Out);
+
+        // create tween to fall back down
+        var tweenFall = new TWEEN.Tween(this.mesh.position)
+            .to({ x: from.x, y: from.y, z: from.z, }, duration)
+            .easing(TWEEN.Easing.Circular.In);
+
+        //chain tweens: AKA make tweenFall begin when tweenJump finishes
+        tweenJump.chain(tweenFall);
+
+        // start the tween
+        tweenJump.start();
     }
 
     getLane() { return this.lane; }

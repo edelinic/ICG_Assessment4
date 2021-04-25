@@ -26,3 +26,5 @@ export function animateVector3(vectorToAnimate, target, options){
     // return the tween in case we want to manipulate it later on
     return tweenVector3;
     }
+
+    
