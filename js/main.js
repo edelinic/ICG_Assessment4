@@ -1,10 +1,11 @@
 import * as Player from './player.js';
 import * as Obstacles from './obstacles.js';
+import * as Score from './score.js';
 import * as Utils from './utils.js';
 // To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
 
 //Global Variables
-let camera, scene, renderer;
+let camera, scene, renderer, score, scoreElement;
 const obstacleCount = 15;
 var obstacles = [];
 var player = null;
@@ -19,7 +20,7 @@ var isPaused = true;
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
-    setTimeout(function() { isPaused = false; }, 2000);
+    setTimeout(function() { isPaused = false; }, 6000);
 });
 
 function init() {
@@ -58,18 +59,9 @@ function init() {
         scene.add(obstacles[i].init());
     }
 
-    // obstacles[0].setPosition(-5, -1, -55);
-    // obstacles[1].setPosition(5, -1, -45);
-    // obstacles[2].setPosition(0, -1, -35);
-    //obstacles[1].remove();
-    //obstacles[0].enterScene(0);
-
-    // var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-    // for(var j = 0; j < spawner.length; j++) {
-    //     currentIndex = spawner[j][0][0];
-    //     obstacles[currentIndex].enterScene(spawner[j][0][1]);
-    // }
-
+    // Instantiate Score
+    score = new Score.Score();
+    scoreElement = document.getElementById('score');
 
     // Player and Controls
     //Player Init
@@ -133,16 +125,16 @@ function init() {
 // Draw the scene every time the screen is refreshed
 function animate(timestamp) {
     if(!isPaused) {
+        scoreElement.innerHTML = score.getScore();
+
         let timeInSeconds = timestamp / 1000;
         if (timeInSeconds - timer >= rowSpeed) {
             timer = timeInSeconds;
             var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-            //console.log(spawner);
             for(var j = 0; j < spawner.length; j++) {
-                console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
+                //console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
                 currentIndex = spawner[j][0][0] + 1;
                 if(currentIndex > 14) { currentIndex = 0; }
-                // console.log(currentIndex);
                 obstacles[currentIndex].enterScene(spawner[j][0][1]);
             }
             
