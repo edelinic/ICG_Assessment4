@@ -44,7 +44,7 @@ export class Obstacle {
 
     // the remove() method sends the item into our virtual rubbish bin
     remove() {
-        this.obstacle.position.set(-100, -10, 0);
+        this.obstacle.position.set(-100, -10, 30);
         this.onScreen = false;
     }
 
