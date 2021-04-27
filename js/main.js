@@ -9,7 +9,7 @@ const obstacleCount = 15;
 var obstacles = [];
 var player = null;
 var timer = 0;
-var speed = 0.5; // in seconds
+var speed = 0.85; // in seconds
 var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
@@ -93,7 +93,7 @@ function init() {
             }
                 break;
 
-            case 33: //up
+            case 38: //up
             case 87: // w
             if (TWEEN.getAll().length == 0){
                 player.jump(5);
@@ -121,8 +121,6 @@ function init() {
 	camera.position.z = 15;
     camera.position.y = 3;
 }
-
-speed = 0.75;
 
 // Draw the scene every time the screen is refreshed
 function animate(timestamp) {
