@@ -143,6 +143,7 @@ function animate(timestamp) {
             obstacles[i].animate();
             if(obstacles[i].currentPosition() > 15) {
                 obstacles[i].remove();
+                score.updateScore(10);
             }
         }
     }
