@@ -57,6 +57,7 @@ function init() {
     for(var i = 0; i < obstacleCount; i++) {
         obstacles[i] = new Obstacles.Obstacle(i);
         scene.add(obstacles[i].init());
+        console.log('currrentPosition: ' + obstacles[i].currentPosition());
     }
 
     // Instantiate Score
@@ -137,7 +138,7 @@ function animate(timestamp) {
                 if(currentIndex > 14) { currentIndex = 0; }
                 obstacles[currentIndex].enterScene(spawner[j][0][1]);
             }
-            
+            score.updateScore(spawner.length * 100);
         }
         for(var i = 0; i < obstacleCount; i++) {
             obstacles[i].animate();

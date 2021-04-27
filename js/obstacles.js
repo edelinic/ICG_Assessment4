@@ -27,7 +27,6 @@ export class Obstacle {
         this.obstacle.position.z += speed;
         if(this.obstacle.position.z > 15) {
             this.remove();
-            //console.log(this.index + ' has been binned...');
         }
     }
 
@@ -44,7 +43,7 @@ export class Obstacle {
 
     // the remove() method sends the item into our virtual rubbish bin
     remove() {
-        this.obstacle.position.set(-100, -10, 30);
+        this.setPosition(-100, -10, 0);
         this.onScreen = false;
     }
 
@@ -54,7 +53,7 @@ export class Obstacle {
             this.obstacle.position.y = -1;
             this.obstacle.position.z = -55; 
             this.onScreen = true;
-            //console.log(this.index + ' has entered the scene in lane: ' + lane);
+            console.log(this.index + ' has entered the scene in lane: ' + lane);
         }
     }
 
@@ -79,7 +78,7 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
     var lanesTaken = [];
     var amountOfObstacles = Utils.randomInt(0, maxPerRow);
     var newIndex = currentIndex;
-    console.log('amount of obstacles to create: ' + amountOfObstacles);
+    //console.log('amount of obstacles to create: ' + amountOfObstacles);
     while(lanesTaken.length < maxPerRow){
         var lane = Utils.randomInt(0, 2);
         if(lanesTaken.indexOf(lane) === -1) {
