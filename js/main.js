@@ -9,10 +9,18 @@ const obstacleCount = 15;
 var obstacles = [];
 var player = null;
 var timer = 0;
-var speed = 0.85; // in seconds
+var rowSpeed = 0.85; // row of obstacles spawn every X seconds
 var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
+
+var isPaused = true;
+
+document.getElementById('startGame').addEventListener('click', function(event) {
+    event.preventDefault();
+    document.getElementById('startMenu').style.display = "none";
+    setTimeout(function() { isPaused = false; }, 2000);
+});
 
 function init() {
 	// Init scene
@@ -104,7 +112,7 @@ function init() {
 
     };
 
-    document.addEventListener( "keydown" , onKeyDown, false );
+    document.addEventListener("keydown" , onKeyDown, false);
 
     // Lighting
 	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -124,24 +132,26 @@ function init() {
 
 // Draw the scene every time the screen is refreshed
 function animate(timestamp) {
-    let timeInSeconds = timestamp / 1000;
-    if (timeInSeconds - timer >= speed) {
-        timer = timeInSeconds;
-        var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-        //console.log(spawner);
-        for(var j = 0; j < spawner.length; j++) {
-            console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
-            currentIndex = spawner[j][0][0] + 1;
-            if(currentIndex > 14) { currentIndex = 0; }
-            // console.log(currentIndex);
-            obstacles[currentIndex].enterScene(spawner[j][0][1]);
+    if(!isPaused) {
+        let timeInSeconds = timestamp / 1000;
+        if (timeInSeconds - timer >= rowSpeed) {
+            timer = timeInSeconds;
+            var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
+            //console.log(spawner);
+            for(var j = 0; j < spawner.length; j++) {
+                console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
+                currentIndex = spawner[j][0][0] + 1;
+                if(currentIndex > 14) { currentIndex = 0; }
+                // console.log(currentIndex);
+                obstacles[currentIndex].enterScene(spawner[j][0][1]);
+            }
+            
         }
-        
-    }
-    for(var i = 0; i < obstacleCount; i++) {
-        obstacles[i].animate();
-        if(obstacles[i].currentPosition() > 15) {
-            obstacles[i].remove();
+        for(var i = 0; i < obstacleCount; i++) {
+            obstacles[i].animate();
+            if(obstacles[i].currentPosition() > 15) {
+                obstacles[i].remove();
+            }
         }
     }
 	

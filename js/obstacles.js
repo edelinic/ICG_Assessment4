@@ -2,7 +2,7 @@ import * as Main from './main.js';
 import * as Utils from './utils.js';
 
 var lanes = [-5, 0, 5];
-var speed = 0.5;
+var speed = 0.5; // speed of obstacles
 
 export class Obstacle {
     constructor(index, lane, obstacle, onScreen) {
