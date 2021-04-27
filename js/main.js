@@ -1,7 +1,7 @@
 import * as Player from './player.js';
 import * as Obstacles from './obstacles.js';
 import * as Utils from './utils.js';
-// To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
+// To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg
 
 //Global Variables
 let camera, scene, renderer;
@@ -35,14 +35,29 @@ function init() {
 	// Render to canvas element
 	document.body.appendChild(renderer.domElement);
 
+		//background loader
+		var loader = new THREE.TextureLoader();
+		var bgTexture = loader.load('textures/desert.jpg');
+		scene.background = bgTexture;
+
+
     // Create PlaneGeometry
     const planeGeometry = new THREE.PlaneGeometry(200, 200, 32);
-    const planeMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+    const planeMaterial = new THREE.MeshPhongMaterial( {side: THREE.DoubleSide} );
+
+		 planeMaterial.color = new THREE.Color(1,1,1);
+		 var sand_texture = new THREE.TextureLoader().load('textures/Sand_03_1K_Diffuse.png');
+		 planeMaterial.map = sand_texture;
+		 var normalMapPlane = new THREE.TextureLoader().load('textures/Sand_03_1K_Normal.png');
+		 planeMaterial.normalMap = normalMapPlane;
+		 normalMapPlane.wrapS = normalMapPlane.wrapT = THREE.RepeatWrapping;
+		 normalMapPlane.repeat = new THREE.Vector2(4,4);
+
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.rotation.x = Math.PI / 2;
     plane.position.set(0,-4,0);
     scene.add(plane);
-    
+
     // Create obstacles
     //scene.add(Obstacles.init(0));
     for(var i = 0; i < obstacleCount; i++) {
@@ -88,7 +103,7 @@ function init() {
             case 68: // d
             if (TWEEN.getAll().length == 0){
                 if (player.getLane() != 2) {        //do not move if already in right lane
-                    player.setLane(player.getLane() + 1);    
+                    player.setLane(player.getLane() + 1);
                 }
             }
                 break;
@@ -109,7 +124,7 @@ function init() {
     // Lighting
 	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
 	scene.add(light);
-	
+
 	const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 	scene.add(directionalLight);
 
@@ -138,7 +153,7 @@ function animate(timestamp) {
             // console.log(currentIndex);
             obstacles[currentIndex].enterScene(spawner[j][0][1]);
         }
-        
+
     }
     for(var i = 0; i < obstacleCount; i++) {
         obstacles[i].animate();
@@ -146,7 +161,7 @@ function animate(timestamp) {
             obstacles[i].remove();
         }
     }
-	
+
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
     TWEEN.update();
