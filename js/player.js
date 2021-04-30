@@ -1,4 +1,5 @@
 import * as TweenHelper from './tween.helper.js';
+import * as FBXLoader from './FBXLoader.js';
 
 export class Player {
     constructor(lanes) {
@@ -34,14 +35,14 @@ export class Player {
         TweenHelper.animateVector3(this.mesh.position, target, {
             duration: 250
         });
-        //change lane 
-        this.lane = targetLane; 
+        //change lane
+        this.lane = targetLane;
     }
 
     jump(jumpHeight) {
         var from = new THREE.Vector3(this.mesh.position.x, this.mesh.position.y, this.mesh.position.z); //curent position
         var to = new THREE.Vector3(this.mesh.position.x, jumpHeight, this.mesh.position.z); //y value changed to jump height
- 
+
         var duration = 300;                    //tween duration: 0.3s
 
         // create tween to jump up
@@ -63,5 +64,28 @@ export class Player {
 
     getLane() { return this.lane; }
 
-}
 
+  //   loadRunner(){
+  //   const loader = new THREE.FBXLoader();
+  //   loader.load( 'models/Running.fbx', function ( object )
+  //   {
+  //
+  //     mixer = new THREE.AnimationMixer( object );
+  //
+  //     const action = mixer.clipAction( object.animations[ 0 ] );
+  //     action.play();
+  //
+  //     object.traverse( function ( child )
+  //     {
+  //       if ( child.isMesh )
+  //       {
+  //
+  //         child.castShadow = true;
+  //         child.receiveShadow = true;
+  //       }
+  //     } );
+  //     scene.add( object );
+  //   } );
+  // }
+
+}

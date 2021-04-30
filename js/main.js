@@ -85,6 +85,8 @@ function init() {
     player.setPosition(0, -1, 10);
     scene.add(player.mesh);
 
+		//player.loadRunner(); 
+
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
 
