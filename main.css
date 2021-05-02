@@ -53,11 +53,34 @@ body {
 #score {
     position: absolute;
     top: 50px;
-    right: 50px;
+    right: 120px;
     background: rgba(0,0,0,0.7);
+    background: grey;
     color: #ffffff;
     font-size: 34px;
     font-weight: bold;
+    padding: 10px 15px;
+}
+
+#pause, #play {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 59px;
+    height: 59px;
+    background-color: grey;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pause svg, #play svg {
+    width: 25px;
+}
+
+#play {
+    display: none;
 }
 
 #startMenu {

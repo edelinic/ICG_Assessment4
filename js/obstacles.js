@@ -19,6 +19,7 @@ export class Obstacle {
         const obstacleMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         // Create mesh with geo and material
         this.obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+        this.onScreen = true;
         this.remove();
         return this.obstacle;
     }
@@ -43,8 +44,10 @@ export class Obstacle {
 
     // the remove() method sends the item into our virtual rubbish bin
     remove() {
-        this.setPosition(-100, -10, 0);
-        this.onScreen = false;
+        if(this.onScreen) {
+            this.setPosition(-100, -10, 0);
+            this.onScreen = false;
+        }
     }
 
     enterScene(lane = 0) {

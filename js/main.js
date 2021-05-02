@@ -164,5 +164,17 @@ function onWindowResize() {
 
 window.addEventListener('resize', onWindowResize, false);
 
+document.getElementById('pause').addEventListener('click', function(el) {
+    isPaused = true;
+    document.getElementById('pause').style.display = "none";
+    document.getElementById('play').style.display = "flex";
+}, false);
+
+document.getElementById('play').addEventListener('click', function(el) {
+    isPaused = false;
+    document.getElementById('play').style.display = "none";
+    document.getElementById('pause').style.display = "flex";
+}, false);
+
 init();
 animate();
