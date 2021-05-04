@@ -20,7 +20,7 @@ var isPaused = true;
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
-    setTimeout(function() { isPaused = false; }, 6000);
+    setTimeout(function() { isPaused = false; }, 3000);
 });
 
 function init() {
@@ -136,16 +136,13 @@ function animate(timestamp) {
             for(var j = 0; j < spawner.length; j++) {
                 //console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
                 currentIndex = spawner[j][0][0] + 1;
-                if(currentIndex > 14) { currentIndex = 0; }
+                if(currentIndex > obstacleCount - 1) { currentIndex = 0; }
                 obstacles[currentIndex].enterScene(spawner[j][0][1]);
             }
             score.updateScore(spawner.length * 100);
         }
         for(var i = 0; i < obstacleCount; i++) {
             obstacles[i].animate();
-            if(obstacles[i].currentPosition() > 15) {
-                obstacles[i].remove();
-            }
         }
     }
 	
