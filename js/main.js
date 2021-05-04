@@ -107,15 +107,15 @@ function init() {
                 if (player.getLane() != 2) {        //do not move if already in right lane
                     player.setLane(player.getLane() + 1);    
                 }
-            
-                break;
             }
-
+                break;
+            
             case 33: //up
             case 87: // w
             if (TWEEN.getAll().length == 0){ 
                 player.jump(5);
             }
+            break;
         }
 
     };
