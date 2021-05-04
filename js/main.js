@@ -101,24 +101,24 @@ function init() {
                             player.setLane(player.getLane() - 1);
                         }
                     }
-                break;
+                    break;
 
             case 39: // right
             case 68: // d
-            if (TWEEN.getAll().length == 0){   
-                if (player.getLane() != 2) {        //do not move if already in right lane
-                    player.setLane(player.getLane() + 1);    
+                if (TWEEN.getAll().length == 0){   
+                    if (player.getLane() != 2) {        //do not move if already in right lane
+                        player.setLane(player.getLane() + 1);    
+                    }
                 }
-            }
+                break;
             
-            break;
-            
-            case 33: //up
+            case 38: //up
             case 87: // w
-            if (TWEEN.getAll().length == 0){ 
-                player.jump(5);
+                if (TWEEN.getAll().length == 0){ 
+                    player.jump(5);
+                }
+                break;
             }
-            break;
         }
     };
 
