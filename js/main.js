@@ -74,35 +74,36 @@ function init() {
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
 
-        switch ( event.keyCode ) {
+        if(!isPaused) {
+            switch ( event.keyCode ) {
 
-            case 37: // left
-            case 65: // a
-                if (TWEEN.getAll().length == 0){        //wait for current tween to complete to not allow double input
-                    if (player.getLane() != 0) {        //do not move if already in left lane
-                        player.setLane(player.getLane() - 1);
+                case 37: // left
+                case 65: // a
+                    if (TWEEN.getAll().length == 0){        //wait for current tween to complete to not allow double input
+                        if (player.getLane() != 0) {        //do not move if already in left lane
+                            player.setLane(player.getLane() - 1);
+                        }
                     }
-                }
-            break;
-
-            case 39: // right
-            case 68: // d
-            if (TWEEN.getAll().length == 0){
-                if (player.getLane() != 2) {        //do not move if already in right lane
-                    player.setLane(player.getLane() + 1);    
-                }
-            }
                 break;
 
-            case 38: //up
-            case 87: // w
-            if (TWEEN.getAll().length == 0){
-                player.jump(5);
+                case 39: // right
+                case 68: // d
+                if (TWEEN.getAll().length == 0){
+                    if (player.getLane() != 2) {        //do not move if already in right lane
+                        player.setLane(player.getLane() + 1);    
+                    }
+                }
+                    break;
+
+                case 38: //up
+                case 87: // w
+                if (TWEEN.getAll().length == 0){
+                    player.jump(5);
+                }
+
+
             }
-
-
         }
-
     };
 
     document.addEventListener("keydown" , onKeyDown, false);
