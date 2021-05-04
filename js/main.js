@@ -20,7 +20,7 @@ var isPaused = true;
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
-    setTimeout(function() { isPaused = false; }, 3000);
+    isPaused = false;
 });
 
 function init() {
