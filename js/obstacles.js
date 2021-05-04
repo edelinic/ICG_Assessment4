@@ -25,9 +25,12 @@ export class Obstacle {
     }
 
     animate() {
-        this.obstacle.position.z += speed;
-        if(this.isOnScreen() && this.obstacle.position.z > 15) {
-            this.remove();
+        if(this.isOnScreen()) {
+            this.obstacle.position.z += speed;
+            if(this.obstacle.position.z > 15) {
+                this.remove();
+                return true;
+            }
         }
     }
 
