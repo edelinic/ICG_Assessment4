@@ -1,6 +1,8 @@
 import * as Player from './player.js';
 import * as Obstacles from './obstacles.js';
 import * as Utils from './utils.js';
+import * as TweenHelper from './tween.helper.js';
+
 // To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
 
 //Global Variables
@@ -13,6 +15,7 @@ var speed = 0.5; // in seconds
 var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
+var cylinder;
 
 function init() {
 	// Init scene
@@ -35,13 +38,27 @@ function init() {
 	// Render to canvas element
 	document.body.appendChild(renderer.domElement);
 
-    // Create PlaneGeometry
-    const planeGeometry = new THREE.PlaneGeometry(200, 200, 32);
-    const planeMaterial = new THREE.MeshPhongMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = Math.PI / 2;
-    plane.position.set(0,-4,0);
-    scene.add(plane);
+    // Create Floor (Rotation Cylinder)
+
+    var material_floor = new THREE.MeshLambertMaterial();           //material 
+    material_floor.color= new THREE.Color(0.8,0.8,1.0);
+    var dirt_texture = new THREE.TextureLoader().load('resources/dirt.jpg')
+
+    dirt_texture.wrapS = THREE.RepeatWrapping;                      //texture
+    dirt_texture.wrapT = THREE.RepeatWrapping;
+    const timesToRepeatHorizontally = 100;
+    const timesToRepeatVertically = 15;
+    dirt_texture.repeat.set(timesToRepeatHorizontally, timesToRepeatVertically);
+    material_floor.map = dirt_texture;
+
+    var cylinder_radius = 1700;                                       //create cylinder
+    var ground_offset = -4 //where the ground is for the cubes
+    const planeGeometry = new THREE.CylinderGeometry(cylinder_radius, cylinder_radius, 1000, 100);
+    cylinder = new THREE.Mesh(planeGeometry, material_floor);
+    cylinder.rotation.x = Math.PI / 2;
+    cylinder.rotation.z = Math.PI / 2;
+    cylinder.position.set(0, ground_offset - cylinder_radius,0);
+    scene.add(cylinder);
     
     // Create obstacles
     //scene.add(Obstacles.init(0));
@@ -86,20 +103,19 @@ function init() {
 
             case 39: // right
             case 68: // d
-            if (TWEEN.getAll().length == 0){
+            if (TWEEN.getAll().length == 0){   
                 if (player.getLane() != 2) {        //do not move if already in right lane
                     player.setLane(player.getLane() + 1);    
                 }
-            }
+            
                 break;
+            }
 
             case 33: //up
             case 87: // w
-            if (TWEEN.getAll().length == 0){
+            if (TWEEN.getAll().length == 0){ 
                 player.jump(5);
             }
-
-
         }
 
     };
@@ -138,18 +154,22 @@ function animate(timestamp) {
             // console.log(currentIndex);
             obstacles[currentIndex].enterScene(spawner[j][0][1]);
         }
-        
     }
+
     for(var i = 0; i < obstacleCount; i++) {
         obstacles[i].animate();
         if(obstacles[i].currentPosition() > 15) {
             obstacles[i].remove();
         }
     }
+
+    //make cylinder (ground) rotate
+    cylinder.rotation.x += 0.0005;
 	
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
     TWEEN.update();
+
 }
 
 function onWindowResize() {
