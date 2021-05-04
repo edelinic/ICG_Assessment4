@@ -108,7 +108,8 @@ function init() {
                     player.setLane(player.getLane() + 1);    
                 }
             }
-                break;
+            
+            break;
             
             case 33: //up
             case 87: // w
