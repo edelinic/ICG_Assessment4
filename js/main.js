@@ -139,10 +139,12 @@ function animate(timestamp) {
                 if(currentIndex > obstacleCount - 1) { currentIndex = 0; }
                 obstacles[currentIndex].enterScene(spawner[j][0][1]);
             }
-            score.updateScore(spawner.length * 100);
         }
         for(var i = 0; i < obstacleCount; i++) {
-            obstacles[i].animate();
+            var obs_result = obstacles[i].animate();
+            if(obs_result) {
+                score.updateScore(100);
+            }
         }
     }
 	
