@@ -3,7 +3,7 @@ import * as TweenHelper from './tween.helper.js';
 export class Player {
     constructor(lanes) {
         this.lanes = lanes;
-        this.lane = 0;
+        this.lane = 1;
     }
 
     init() {
