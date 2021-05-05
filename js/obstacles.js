@@ -2,7 +2,7 @@ import * as Main from './main.js';
 import * as Utils from './utils.js';
 
 var lanes = [-5, 0, 5];
-var speed = 0.5;
+var speed = 0.5; // speed of obstacles
 
 export class Obstacle {
     constructor(index, lane, obstacle, onScreen) {
@@ -24,15 +24,18 @@ export class Obstacle {
            var normalMapObstacle = new THREE.TextureLoader().load('textures/crate1_normal.png');
            obstacleMaterial.normalMap = normalMapObstacle;
         this.obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
+        this.onScreen = true;
         this.remove();
         return this.obstacle;
     }
 
     animate() {
-        this.obstacle.position.z += speed;
-        if(this.obstacle.position.z > 15) {
-            this.remove();
-            //console.log(this.index + ' has been binned...');
+        if(this.isOnScreen()) {
+            this.obstacle.position.z += speed;
+            if(this.obstacle.position.z > 15) {
+                this.remove();
+                return true;
+            }
         }
     }
 
@@ -49,8 +52,10 @@ export class Obstacle {
 
     // the remove() method sends the item into our virtual rubbish bin
     remove() {
-        this.obstacle.position.set(-100, -10, 30);
-        this.onScreen = false;
+        if(this.onScreen) {
+            this.setPosition(-100, -10, 0);
+            this.onScreen = false;
+        }
     }
 
     enterScene(lane = 0) {
@@ -59,7 +64,7 @@ export class Obstacle {
             this.obstacle.position.y = -1;
             this.obstacle.position.z = -55;
             this.onScreen = true;
-            //console.log(this.index + ' has entered the scene in lane: ' + lane);
+            console.log(this.index + ' has entered the scene in lane: ' + lane);
         }
     }
 
@@ -84,7 +89,7 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
     var lanesTaken = [];
     var amountOfObstacles = Utils.randomInt(0, maxPerRow);
     var newIndex = currentIndex;
-    console.log('amount of obstacles to create: ' + amountOfObstacles);
+    //console.log('amount of obstacles to create: ' + amountOfObstacles);
     while(lanesTaken.length < maxPerRow){
         var lane = Utils.randomInt(0, 2);
         if(lanesTaken.indexOf(lane) === -1) {

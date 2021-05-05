@@ -1,21 +1,30 @@
 import * as Player from './player.js';
 import * as Obstacles from './obstacles.js';
+import * as Score from './score.js';
 import * as Utils from './utils.js';
 import * as TweenHelper from './tween.helper.js';
 
 // To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
 
 //Global Variables
-let camera, scene, renderer;
+let camera, scene, renderer, score, scoreElement;
 const obstacleCount = 15;
 var obstacles = [];
 var player = null;
 var timer = 0;
-var speed = 0.5; // in seconds
+var rowSpeed = 0.85; // row of obstacles spawn every X seconds
 var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
 var cylinder;
+
+var isPaused = true;
+
+document.getElementById('startGame').addEventListener('click', function(event) {
+    event.preventDefault();
+    document.getElementById('startMenu').style.display = "none";
+    isPaused = false;
+});
 
 function init() {
 	// Init scene
@@ -66,20 +75,12 @@ function init() {
     for(var i = 0; i < obstacleCount; i++) {
         obstacles[i] = new Obstacles.Obstacle(i);
         scene.add(obstacles[i].init());
+        console.log('currrentPosition: ' + obstacles[i].currentPosition());
     }
 
-    // obstacles[0].setPosition(-5, -1, -55);
-    // obstacles[1].setPosition(5, -1, -45);
-    // obstacles[2].setPosition(0, -1, -35);
-    //obstacles[1].remove();
-    //obstacles[0].enterScene(0);
-
-    // var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-    // for(var j = 0; j < spawner.length; j++) {
-    //     currentIndex = spawner[j][0][0];
-    //     obstacles[currentIndex].enterScene(spawner[j][0][1]);
-    // }
-
+    // Instantiate Score
+    score = new Score.Score();
+    scoreElement = document.getElementById('score');
 
     // Player and Controls
     //Player Init
@@ -93,38 +94,38 @@ function init() {
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
 
-        switch ( event.keyCode ) {
+        if(!isPaused) {
+            switch ( event.keyCode ) {
 
-            case 37: // left
-            case 65: // a
-                if (TWEEN.getAll().length == 0){        //wait for current tween to complete to not allow double input
-                    if (player.getLane() != 0) {        //do not move if already in left lane
-                        player.setLane(player.getLane() - 1);
+                case 37: // left
+                case 65: // a
+                    if (TWEEN.getAll().length == 0){        //wait for current tween to complete to not allow double input
+                        if (player.getLane() != 0) {        //do not move if already in left lane
+                            player.setLane(player.getLane() - 1);
+                        }
                     }
-                }
-            break;
+                    break;
 
             case 39: // right
             case 68: // d
-            if (TWEEN.getAll().length == 0){   
-                if (player.getLane() != 2) {        //do not move if already in right lane
-                    player.setLane(player.getLane() + 1);
+                if (TWEEN.getAll().length == 0){   
+                    if (player.getLane() != 2) {        //do not move if already in right lane
+                        player.setLane(player.getLane() + 1);    
+                    }
                 }
-            }
+                break;
             
-            break;
-            
-            case 33: //up
+            case 38: //up
             case 87: // w
-            if (TWEEN.getAll().length == 0){ 
-                player.jump(5);
+                if (TWEEN.getAll().length == 0){ 
+                    player.jump(5);
+                }
+                break;
             }
-            break;
         }
-
     };
 
-    document.addEventListener( "keydown" , onKeyDown, false );
+    document.addEventListener("keydown" , onKeyDown, false);
 
     // Lighting
 	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -142,28 +143,27 @@ function init() {
     camera.position.y = 3;
 }
 
-speed = 0.75;
-
 // Draw the scene every time the screen is refreshed
 function animate(timestamp) {
-    let timeInSeconds = timestamp / 1000;
-    if (timeInSeconds - timer >= speed) {
-        timer = timeInSeconds;
-        var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
-        //console.log(spawner);
-        for(var j = 0; j < spawner.length; j++) {
-            console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
-            currentIndex = spawner[j][0][0] + 1;
-            if(currentIndex > 14) { currentIndex = 0; }
-            // console.log(currentIndex);
-            obstacles[currentIndex].enterScene(spawner[j][0][1]);
-        }
-    }
+    if(!isPaused) {
+        scoreElement.innerHTML = score.getScore();
 
-    for(var i = 0; i < obstacleCount; i++) {
-        obstacles[i].animate();
-        if(obstacles[i].currentPosition() > 15) {
-            obstacles[i].remove();
+        let timeInSeconds = timestamp / 1000;
+        if (timeInSeconds - timer >= rowSpeed) {
+            timer = timeInSeconds;
+            var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
+            for(var j = 0; j < spawner.length; j++) {
+                //console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
+                currentIndex = spawner[j][0][0] + 1;
+                if(currentIndex > obstacleCount - 1) { currentIndex = 0; }
+                obstacles[currentIndex].enterScene(spawner[j][0][1]);
+            }
+        }
+        for(var i = 0; i < obstacleCount; i++) {
+            var obs_result = obstacles[i].animate();
+            if(obs_result) {
+                score.updateScore(100);
+            }
         }
     }
 
@@ -186,6 +186,18 @@ function onWindowResize() {
 }
 
 window.addEventListener('resize', onWindowResize, false);
+
+document.getElementById('pause').addEventListener('click', function(el) {
+    isPaused = true;
+    document.getElementById('pause').style.display = "none";
+    document.getElementById('play').style.display = "flex";
+}, false);
+
+document.getElementById('play').addEventListener('click', function(el) {
+    isPaused = false;
+    document.getElementById('play').style.display = "none";
+    document.getElementById('pause').style.display = "flex";
+}, false);
 
 init();
 animate();
