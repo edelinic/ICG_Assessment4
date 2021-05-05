@@ -4,7 +4,7 @@ import * as Score from './score.js';
 import * as Utils from './utils.js';
 import * as TweenHelper from './tween.helper.js';
 
-// To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg 
+// To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg
 
 //Global Variables
 let camera, scene, renderer, score, scoreElement;
@@ -47,10 +47,14 @@ function init() {
 	// Render to canvas element
 	document.body.appendChild(renderer.domElement);
 
+    //Create Background Skybox
+    var loader = new THREE.TextureLoader();
+    var bgTexture = loader.load('textures/desert.jpg');
+    scene.background = bgTexture;
 
     // Create Floor (Rotation Cylinder)
 
-    var material_floor = new THREE.MeshLambertMaterial();           //material 
+    var material_floor = new THREE.MeshLambertMaterial();           //material
     material_floor.color= new THREE.Color(0.8,0.8,1.0);
     var dirt_texture = new THREE.TextureLoader().load('resources/dirt.jpg')
 
@@ -69,7 +73,7 @@ function init() {
     cylinder.rotation.z = Math.PI / 2;
     cylinder.position.set(0, ground_offset - cylinder_radius,0);
     scene.add(cylinder);
-    
+
     // Create obstacles
     //scene.add(Obstacles.init(0));
     for(var i = 0; i < obstacleCount; i++) {
@@ -89,7 +93,7 @@ function init() {
     player.setPosition(0, -1, 10);
     scene.add(player.mesh);
 
-		//player.loadRunner(); 
+		player.LoadAnimatedModel();
 
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
@@ -108,16 +112,16 @@ function init() {
 
             case 39: // right
             case 68: // d
-                if (TWEEN.getAll().length == 0){   
+                if (TWEEN.getAll().length == 0){
                     if (player.getLane() != 2) {        //do not move if already in right lane
-                        player.setLane(player.getLane() + 1);    
+                        player.setLane(player.getLane() + 1);
                     }
                 }
                 break;
-            
+
             case 38: //up
             case 87: // w
-                if (TWEEN.getAll().length == 0){ 
+                if (TWEEN.getAll().length == 0){
                     player.jump(5);
                 }
                 break;
@@ -169,7 +173,7 @@ function animate(timestamp) {
 
     //make cylinder (ground) rotate
     cylinder.rotation.x += 0.0005;
-	
+
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
     TWEEN.update();

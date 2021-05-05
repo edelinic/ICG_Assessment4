@@ -1,5 +1,7 @@
 import * as TweenHelper from './tween.helper.js';
-//import * as FBXLoader from './FBXLoader.js';
+import * as GLTFLoader from './GLTFLoader.js';
+//import * as THREE from './three.js';
+import * as FBXLoader from './FBXLoader.js';
 
 export class Player {
     constructor(lanes) {
@@ -65,27 +67,27 @@ export class Player {
     getLane() { return this.lane; }
 
 
-  //   loadRunner(){
-  //   const loader = new THREE.FBXLoader();
-  //   loader.load( 'models/Running.fbx', function ( object )
-  //   {
-  //
-  //     mixer = new THREE.AnimationMixer( object );
-  //
-  //     const action = mixer.clipAction( object.animations[ 0 ] );
-  //     action.play();
-  //
-  //     object.traverse( function ( child )
-  //     {
-  //       if ( child.isMesh )
-  //       {
-  //
-  //         child.castShadow = true;
-  //         child.receiveShadow = true;
-  //       }
-  //     } );
-  //     scene.add( object );
-  //   } );
-  // }
+    LoadAnimatedModel()
+  {
+    var loader = new THREE.GLTFLoader();
+    //loader.setPath('models/');
+    const idleAnim = loader.loadAsync('models/Idle.gltf');
+    //loader.load('Idle.gltf',
+    // (fbx) => {
+    //    //fbx.scale.setScalar(0.1);
+    //    //fbx.traverse(c => {
+    //    //c.castShadow = true;
+    //    //});
+    //   var anim = new THREE.GLTFLoader();
+    //   anim.setPath('models/');
+    //   anim.load('Running.gltf', (anim) => {
+    //     this.mixer = new THREE.AnimationMixer(fbx);
+    //     const idle = this.mixer.clipAction(anim.animations[0]);
+    //     idle.play();
+    //   });
+    //   this.scene.add(fbx)
+    // });
+  }
+
 
 }
