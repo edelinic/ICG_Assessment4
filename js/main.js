@@ -47,6 +47,7 @@ function init() {
 	// Render to canvas element
 	document.body.appendChild(renderer.domElement);
 
+
     // Create Floor (Rotation Cylinder)
 
     var material_floor = new THREE.MeshLambertMaterial();           //material 
@@ -88,6 +89,8 @@ function init() {
     player.setPosition(0, -1, 10);
     scene.add(player.mesh);
 
+		//player.loadRunner(); 
+
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
 
@@ -127,7 +130,7 @@ function init() {
     // Lighting
 	const light = new THREE.AmbientLight( 0x404040 ); // soft white light
 	scene.add(light);
-	
+
 	const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
 	scene.add(directionalLight);
 

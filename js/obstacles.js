@@ -18,6 +18,11 @@ export class Obstacle {
         // Create material with color
         const obstacleMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff });
         // Create mesh with geo and material
+           var crate_texture = new THREE.TextureLoader().load('textures/crate1_diffuse.png');
+           obstacleMaterial.map = crate_texture;
+           obstacleMaterial.color = new THREE.Color(1,1,1);
+           var normalMapObstacle = new THREE.TextureLoader().load('textures/crate1_normal.png');
+           obstacleMaterial.normalMap = normalMapObstacle;
         this.obstacle = new THREE.Mesh(obstacleGeometry, obstacleMaterial);
         this.onScreen = true;
         this.remove();
@@ -57,7 +62,7 @@ export class Obstacle {
         if(this.onScreen != true) {
             this.obstacle.position.x = lanes[lane];
             this.obstacle.position.y = -1;
-            this.obstacle.position.z = -55; 
+            this.obstacle.position.z = -55;
             this.onScreen = true;
             console.log(this.index + ' has entered the scene in lane: ' + lane);
         }
@@ -101,7 +106,7 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
         } else {
             newIndex = newIndex + i;
         }
-    
+
         lane = lanesTaken[i];
 
         entry.push(newIndex, lane);
