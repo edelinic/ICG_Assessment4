@@ -6,7 +6,7 @@ export function animateVector3(vectorToAnimate, target, options){
     options = options || {};
     // get targets from options or set to defaults
     var to = target || THREE.Vector3(),
-        easing = options.easing || TWEEN.Easing.Cubic.In,
+        easing = options.easing || TWEEN.Easing.Linear.None,
         duration = options.duration || 2000;
     // create the tween
     var tweenVector3 = new TWEEN.Tween(vectorToAnimate)
