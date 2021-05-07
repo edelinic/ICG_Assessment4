@@ -3,6 +3,9 @@ import * as Obstacles from './obstacles.js';
 import * as Score from './score.js';
 import * as Utils from './utils.js';
 import * as TweenHelper from './tween.helper.js';
+import {GUI} from './gui.js';
+import * as GLTFLoader from './GLTFLoader.js';
+
 
 // To learn more about how to import modules: https://www.youtube.com/watch?v=s9kNndJLOjg
 
@@ -93,7 +96,137 @@ function init() {
     player.setPosition(0, -1, 10);
     scene.add(player.mesh);
 
-		player.LoadAnimatedModel();
+var mixer = new THREE.AnimationMixer();
+const clock = new THREE.Clock();
+var modelReady = false;
+var animationActions= new Array();// THREE.AnimationAction[] = new Array()
+var activeAction = THREE.AnimationAction;
+var lastAction = THREE.AnimationAction;
+const gltfLoader = new THREE.GLTFLoader();
+
+let gui = new GUI();
+const animationsFolder = gui.addFolder("Animations");
+animationsFolder.open();
+
+gltfLoader.load(
+    'models/T-pose.gltf',
+    (gltf) => {
+        // gltf.scene.scale.set(.01, .01, .01)
+        mixer = new THREE.AnimationMixer(gltf.scene);
+
+        let animationAction = mixer.clipAction((gltf).animations[0]); // as any
+        animationActions.push(animationAction)
+        animationsFolder.add(animations, "default")
+        activeAction = animationActions[0]
+
+        scene.add(gltf.scene);
+
+        //add an animation from another file
+        gltfLoader.load('models/Idle.gltf',
+            (gltf) => {
+                console.log("loaded idle")
+                let animationAction = mixer.clipAction((gltf).animations[0]);// as any
+                animationActions.push(animationAction)
+                animationsFolder.add(animations, "idle")
+
+                //add an animation from another file
+                gltfLoader.load('models/Running.gltf',
+                    (gltf) => {
+                        console.log("Running")
+                        let animationAction = mixer.clipAction((gltf).animations[0]);// as any
+                        animationActions.push(animationAction)
+                        animationsFolder.add(animations, "running")
+
+                        //add an animation from another file
+                        gltfLoader.load('models/Jumping.gltf',
+                            (gltf) => {
+                                console.log("loaded jumping");
+                                //(gltf).animations[0].tracks.shift() //delete the specific track that moves the object forward while running // as any
+                                let animationAction = mixer.clipAction((gltf).animations[0]);// as any
+                                animationActions.push(animationAction)
+                                animationsFolder.add(animations, "jumping")
+
+                                modelReady = true
+                                console.log(modelReady);
+                            },
+                            (xhr) => {
+                                console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+                            },
+                            (error) => {
+                                console.log(error);
+                            }
+                        )
+                    },
+                    (xhr) => {
+                        console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                )
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    },
+    (xhr) => {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+    },
+    (error) => {
+        console.log(error);
+    }
+)
+    // var clock = new THREE.Clock();
+    // // model
+    // let mixer;
+    // const gltfloader = new THREE.GLTFLoader();
+    // gltfloader.load('models/T-pose.gltf', function (gltf) {
+    // const model = gltf.scene;
+    // scene.add(model);
+    // mixer = new THREE.AnimationMixer(model);
+    // gltf.animations.forEach((clip) =>
+    // {
+    //     mixer.clipAction(clip).play();
+    // })
+    // });
+
+    var animations =
+    {
+    default: function () {
+        setAction(animationActions[0])
+    },
+    idle: function () {
+        setAction(animationActions[1])
+    },
+    running: function () {
+        setAction(animationActions[2])
+    },
+    jumping: function () {
+        setAction(animationActions[3])
+    },
+  };
+
+  const setAction = (toAction) => { //: THREE.AnimationAction
+    if (toAction != activeAction) {
+        lastAction = activeAction
+        activeAction = toAction
+        //lastAction.stop()
+        lastAction.fadeOut(1)
+        activeAction.reset()
+        activeAction.fadeIn(1)
+        activeAction.play()
+    }
+};
+
+    // renderer
+    //var delta = clock.getDelta();
+    //mixer.update( delta );
+
+
 
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
@@ -152,6 +285,7 @@ function animate(timestamp) {
     if(!isPaused) {
         scoreElement.innerHTML = score.getScore();
 
+
         let timeInSeconds = timestamp / 1000;
         if (timeInSeconds - timer >= rowSpeed) {
             timer = timeInSeconds;
@@ -175,7 +309,9 @@ function animate(timestamp) {
     cylinder.rotation.x += 0.0005;
 
 	renderer.render(scene, camera);
+  
     requestAnimationFrame(animate);
+
     TWEEN.update();
 
 }

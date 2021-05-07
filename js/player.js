@@ -1,6 +1,4 @@
 import * as TweenHelper from './tween.helper.js';
-import * as GLTFLoader from './GLTFLoader.js';
-//import * as THREE from './three.js';
 import * as FBXLoader from './FBXLoader.js';
 
 export class Player {
@@ -69,25 +67,23 @@ export class Player {
 
     LoadAnimatedModel()
   {
-    var loader = new THREE.GLTFLoader();
-    //loader.setPath('models/');
-    const idleAnim = loader.loadAsync('models/Idle.gltf');
-    //loader.load('Idle.gltf',
-    // (fbx) => {
-    //    //fbx.scale.setScalar(0.1);
-    //    //fbx.traverse(c => {
-    //    //c.castShadow = true;
-    //    //});
-    //   var anim = new THREE.GLTFLoader();
-    //   anim.setPath('models/');
-    //   anim.load('Running.gltf', (anim) => {
-    //     this.mixer = new THREE.AnimationMixer(fbx);
-    //     const idle = this.mixer.clipAction(anim.animations[0]);
-    //     idle.play();
-    //   });
-    //   this.scene.add(fbx)
+    // var clock = new THREE.Clock();
+    // // model
+    // let mixer;
+    // const loader = new THREE.GLTFLoader();
+    // loader.load('models/Idle.gltf', function (gltf) {
+    // const model = gltf.scene;
+    // scene.add(model);
+    // mixer = new THREE.AnimationMixer(model);
+    // gltf.animations.forEach((clip) =>
+    // {
+    //     mixer.clipAction(clip).play();
+    // })
     // });
-  }
+    // // renderer
+    // var delta = clock.getDelta();
+    // mixer.update( delta );
 
 
+}
 }
