@@ -309,7 +309,8 @@ function animate(timestamp) {
     cylinder.rotation.x += 0.0005;
 
 	renderer.render(scene, camera);
-  
+  	//if (modelReady) mixer.update(clock.getDelta());
+
     requestAnimationFrame(animate);
 
     TWEEN.update();
