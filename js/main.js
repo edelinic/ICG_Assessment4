@@ -167,11 +167,11 @@ function animate(timestamp) {
         }
 
     //make cylinder (ground) rotate
-    cylinder.rotation.x += 0.0005;
+    cylinder.rotation.x += 0.00035;
 	CheckForCollisions();
 
     }
-    
+
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
     TWEEN.update();
@@ -209,8 +209,8 @@ function CheckForCollisions(){
     var PlayerX1 = player.mesh.position.x + (1.5);
     var PlayerY0 = player.mesh.position.y - (1.5);
     var PlayerY1 = player.mesh.position.y + (1.5);
-    var PlayerZ0 = player.mesh.position.z - (1.5);
-    var PlayerZ1 = player.mesh.position.z + (1.5);
+    var PlayerZ0 = player.mesh.position.z;// - (1.5);
+    var PlayerZ1 = player.mesh.position.z;// + (1.5);
 
     //Loop through every object the player can collide with
 
@@ -221,16 +221,17 @@ function CheckForCollisions(){
         var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
         var ObstacleY0 = obstacles[i].obstacle.position.y;
         var ObstacleY1 = obstacles[i].obstacle.position.y;
-        var ObstacleZ0 = obstacles[i].obstacle.position.z;
-        var ObstacleZ1 = obstacles[i].obstacle.position.z;
+        var ObstacleZ0 = obstacles[i].obstacle.position.z - 11;
+        var ObstacleZ1 = obstacles[i].obstacle.position.z - 8.5;
 
 
                 if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
                 (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
                 (PlayerX0 < ObstacleZ1) && (PlayerX1 > ObstacleZ0))
                 {
-                    console.log("WOOOOO");
-                    //player.mesh.color = new THREE.color(1,1,1);
+                    //console.log("WOOOOO");
+                    isPaused = true;
+                    //alert('oops');
                 }
 
             }
