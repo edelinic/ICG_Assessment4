@@ -227,7 +227,7 @@ function CheckForCollisions(){
 
                 if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
                 (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
-                (PlayerX0 < ObstacleZ1) && (PlayerX1 > ObstacleZ0))
+                (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
                 {
                     console.log("WOOOOO");
                     //player.mesh.color = new THREE.color(1,1,1);
