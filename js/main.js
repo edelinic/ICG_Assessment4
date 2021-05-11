@@ -165,11 +165,13 @@ function animate(timestamp) {
                 score.updateScore(100);
             }
         }
-    }
 
     //make cylinder (ground) rotate
     cylinder.rotation.x += 0.0005;
 	CheckForCollisions();
+
+    }
+    
 	renderer.render(scene, camera);
     requestAnimationFrame(animate);
     TWEEN.update();
