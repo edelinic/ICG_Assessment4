@@ -20,6 +20,9 @@ var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
 var cylinder;
+let model, skeleton, mixer, clock;
+let idleAction, runAction, jumpAction;
+let actions, settings;
 
 var isPaused = true;
 
@@ -97,10 +100,7 @@ function init() {
     scene.add(player.mesh);
 
     //Player Animations
-    let model, skeleton;
-    let idleAction, runAction, jumpAction;
-    let actions, settings;
-    let clock = new THREE.Clock();
+    clock = new THREE.Clock();
     const gltfloader = new THREE.GLTFLoader();
     gltfloader.load( 'models/RemyAnimated01.glb', function ( gltf ) {
 
@@ -121,11 +121,11 @@ function init() {
 
       const animations = gltf.animations;
 
-      const mixer = new THREE.AnimationMixer( model );
+      mixer = new THREE.AnimationMixer( model );
 
       idleAction = mixer.clipAction( animations[ 0 ] );
       runAction = mixer.clipAction( animations[ 1 ] );
-      jumpAction = mixer.clipAction( animations[ 2 ] );
+      jumpAction = mixer.clipAction( animations[ 3 ] );
 
       actions = [ idleAction, runAction, jumpAction ];
 
