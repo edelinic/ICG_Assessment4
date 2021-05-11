@@ -102,11 +102,11 @@ function init() {
     //Player Animations
     clock = new THREE.Clock();
     const gltfloader = new THREE.GLTFLoader();
-    gltfloader.load( 'models/RemyAnimated01.glb', function ( gltf ) {
+    gltfloader.load( 'models/RemyAnimated02.glb', function ( gltf ) {
 
       model = gltf.scene;
       scene.add( model );
-
+      model.animations = gltf.animations;
       model.traverse( function ( object ) {
 
         if ( object.isMesh ) object.castShadow = true;
@@ -239,10 +239,12 @@ function animate(timestamp) {
 
 	renderer.render(scene, camera);
 
-  let mixerUpdateDelta = clock.getDelta();
-  mixer.update( mixerUpdateDelta );
+    let mixerUpdateDelta = clock.getDelta();
 
     requestAnimationFrame(animate);
+    //updates mixer to change animations
+
+    mixer.update( mixerUpdateDelta );
 
     TWEEN.update();
 
