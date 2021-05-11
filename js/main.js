@@ -96,27 +96,65 @@ function init() {
     player.setPosition(0, -1, 10);
     scene.add(player.mesh);
 
+    //Player Animations
+    let model, skeleton;
+    let idleAction, runAction, jumpAction;
+    let actions, settings;
+    let clock = new THREE.Clock();
+    const gltfloader = new THREE.GLTFLoader();
+    gltfloader.load( 'models/RemyAnimated01.glb', function ( gltf ) {
 
+      model = gltf.scene;
+      scene.add( model );
 
+      model.traverse( function ( object ) {
 
-    // var clock = new THREE.Clock();
-    // // model
-    // let mixer;
-    // const gltfloader = new THREE.GLTFLoader();
-    // gltfloader.load('models/T-pose.gltf', function (gltf) {
-    // const model = gltf.scene;
-    // scene.add(model);
-    // mixer = new THREE.AnimationMixer(model);
-    // gltf.animations.forEach((clip) =>
-    // {
-    //     mixer.clipAction(clip).play();
-    // })
-    // });
+        if ( object.isMesh ) object.castShadow = true;
 
-    // renderer
-    //var delta = clock.getDelta();
-    //mixer.update( delta );
+      } );
 
+      skeleton = new THREE.SkeletonHelper( model );
+      skeleton.visible = false;
+      scene.add( skeleton );
+
+      //createPanel();
+
+      const animations = gltf.animations;
+
+      const mixer = new THREE.AnimationMixer( model );
+
+      idleAction = mixer.clipAction( animations[ 0 ] );
+      runAction = mixer.clipAction( animations[ 1 ] );
+      jumpAction = mixer.clipAction( animations[ 2 ] );
+
+      actions = [ idleAction, runAction, jumpAction ];
+
+      idleAction.play();
+      //activateAllActions();
+
+      //animate();
+
+    } );
+
+    //Pause all actions
+    function pauseAllActions()
+    {
+      actions.forEach( function ( action )
+    {
+      action.paused = true;
+    } );
+  }
+
+  function unPauseAllActions()
+  {
+
+    actions.forEach( function ( action )
+    {
+      action.paused = false;
+    } );
+  }
+
+  //
 
 
     //add Event Listener for Keys
@@ -172,7 +210,7 @@ function init() {
 }
 
 // Draw the scene every time the screen is refreshed
-function animate(timestamp, modelReady, mixer) {
+function animate(timestamp) {
     if(!isPaused) {
         scoreElement.innerHTML = score.getScore();
 
@@ -200,6 +238,9 @@ function animate(timestamp, modelReady, mixer) {
     cylinder.rotation.x += 0.0005;
 
 	renderer.render(scene, camera);
+
+  let mixerUpdateDelta = clock.getDelta();
+  mixer.update( mixerUpdateDelta );
 
     requestAnimationFrame(animate);
 
