@@ -20,7 +20,7 @@ var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
 var cylinder;
-let model, skeleton, mixer, clock;
+let model, skeleton, mixer, clock, mixerUpdateDelta;
 let idleAction, runAction, jumpAction;
 let actions, settings;
 
@@ -105,6 +105,10 @@ function init() {
     gltfloader.load( 'models/RemyAnimated02.glb', function ( gltf ) {
 
       model = gltf.scene;
+      //gltf.postionx = 0;
+      //gltf.postiony = -1;
+      //gltf.positionz = 10;
+
       scene.add( model );
       model.animations = gltf.animations;
       model.traverse( function ( object ) {
@@ -123,6 +127,7 @@ function init() {
 
       mixer = new THREE.AnimationMixer( model );
 
+
       idleAction = mixer.clipAction( animations[ 0 ] );
       runAction = mixer.clipAction( animations[ 1 ] );
       jumpAction = mixer.clipAction( animations[ 3 ] );
@@ -131,8 +136,13 @@ function init() {
 
       idleAction.play();
       //activateAllActions();
+      //let mixerUpdateDelta = clock.getDelta();
 
+
+      //updates mixer to change animation
+      //mixer.update( mixerUpdateDelta );
       //animate();
+
 
     } );
 
@@ -185,6 +195,7 @@ function init() {
             case 87: // w
                 if (TWEEN.getAll().length == 0){
                     player.jump(5);
+                    jumpAction.play();
                 }
                 break;
             }
@@ -239,12 +250,13 @@ function animate(timestamp) {
 
 	renderer.render(scene, camera);
 
-    let mixerUpdateDelta = clock.getDelta();
+
 
     requestAnimationFrame(animate);
     //updates mixer to change animations
-
+    mixerUpdateDelta = clock.getDelta();
     mixer.update( mixerUpdateDelta );
+
 
     TWEEN.update();
 
