@@ -95,8 +95,9 @@ function init() {
 
     // Player and Controls
     //Player Init
-	player = new Player.Player(lanes);
-	player.init();
+
+  player = new Player.Player(lanes);
+  player.init();
     player.setPosition(0, -1, 10);
     scene.add(player.mesh);
 
@@ -114,24 +115,11 @@ function init() {
       model.traverse( function ( object ) {
 
         if ( object.isMesh ) object.castShadow = true;
-        var vector = new THREE.Vector3(); // create once and reuse it!
 
-        camera.getWorldDirection( vector );
-        var theta = Math.atan2(vector.x,vector.z);
-
-        //
-
-
-        //object.rotation.y += THREE.Math.radToDeg(180);
-      //  object.lookAt(theta);
-
-        //var charangle = THREE.Math.radToDeg( Math.atan2(vector.x,vector.z) );
         object.lookAt(0,-1000,-50);
+        object.position.y = -0.45;
+        //object = new Player.Player(lanes);
 
-        //object.position.x += 10;
-        //object.position.z += 10;//4.23;
-        //object.position.y += 8;
-        //object.rotation.y = ( charangle );
 
       } );
 
@@ -165,6 +153,8 @@ function init() {
 
 
     } );
+
+    //model = new Player.Player(lanes);
 
     //Pause all actions
     function pauseAllActions()
@@ -214,8 +204,12 @@ function init() {
             case 38: //up
             case 87: // w
                 if (TWEEN.getAll().length == 0){
+
                     player.jump(5);
-                    //jumpAction.play();
+                    jumpAction.play();
+                    runAction.startAt(2);
+
+
                 }
                 break;
             }
@@ -236,7 +230,7 @@ function init() {
 	scene.add(camera);
 
 	// Position camera
-	camera.position.z = 15;
+	camera.position.z = 7; //original position 15
     camera.position.y = 3;
 }
 

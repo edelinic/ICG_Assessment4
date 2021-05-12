@@ -65,25 +65,4 @@ export class Player {
     getLane() { return this.lane; }
 
 
-    LoadAnimatedModel()
-  {
-    // var clock = new THREE.Clock();
-    // // model
-    // let mixer;
-    // const loader = new THREE.GLTFLoader();
-    // loader.load('models/Idle.gltf', function (gltf) {
-    // const model = gltf.scene;
-    // scene.add(model);
-    // mixer = new THREE.AnimationMixer(model);
-    // gltf.animations.forEach((clip) =>
-    // {
-    //     mixer.clipAction(clip).play();
-    // })
-    // });
-    // // renderer
-    // var delta = clock.getDelta();
-    // mixer.update( delta );
-
-
-}
 }
