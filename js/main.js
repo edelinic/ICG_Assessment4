@@ -20,9 +20,10 @@ var currentIndex = 0;
 var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
 var cylinder;
-let model, skeleton, mixer, clock, mixerUpdateDelta;
-let idleAction, runAction, jumpAction;
-let actions, settings;
+var model, skeleton, mixer, clock, mixerUpdateDelta;
+var idleAction, runAction, jumpAction;
+var actions, settings;
+var modelReady = false;
 
 var isPaused = true;
 
@@ -105,15 +106,32 @@ function init() {
     gltfloader.load( 'models/RemyAnimated02.glb', function ( gltf ) {
 
       model = gltf.scene;
-      //gltf.postionx = 0;
-      //gltf.postiony = -1;
-      //gltf.positionz = 10;
+      console.log('model position x: ' + model.position.x);
+
 
       scene.add( model );
       model.animations = gltf.animations;
       model.traverse( function ( object ) {
 
         if ( object.isMesh ) object.castShadow = true;
+        var vector = new THREE.Vector3(); // create once and reuse it!
+
+        camera.getWorldDirection( vector );
+        var theta = Math.atan2(vector.x,vector.z);
+
+        //
+
+
+        //object.rotation.y += THREE.Math.radToDeg(180);
+      //  object.lookAt(theta);
+
+        //var charangle = THREE.Math.radToDeg( Math.atan2(vector.x,vector.z) );
+        object.lookAt(0,-1000,-50);
+
+        //object.position.x += 10;
+        //object.position.z += 10;//4.23;
+        //object.position.y += 8;
+        //object.rotation.y = ( charangle );
 
       } );
 
@@ -135,6 +153,8 @@ function init() {
       actions = [ idleAction, runAction, jumpAction ];
 
       idleAction.play();
+      modelReady = true;
+      console.log('model ready: ' + modelReady);
       //activateAllActions();
       //let mixerUpdateDelta = clock.getDelta();
 
@@ -195,7 +215,7 @@ function init() {
             case 87: // w
                 if (TWEEN.getAll().length == 0){
                     player.jump(5);
-                    jumpAction.play();
+                    //jumpAction.play();
                 }
                 break;
             }
@@ -253,10 +273,13 @@ function animate(timestamp) {
 
 
     requestAnimationFrame(animate);
-    //updates mixer to change animations
-    mixerUpdateDelta = clock.getDelta();
-    mixer.update( mixerUpdateDelta );
 
+    //updates mixer to change animations
+    if(modelReady == true)
+    {
+      mixerUpdateDelta = clock.getDelta();
+      mixer.update( mixerUpdateDelta );
+    }
 
     TWEEN.update();
 
