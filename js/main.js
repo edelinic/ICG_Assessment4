@@ -93,13 +93,6 @@ function init() {
     score = new Score.Score();
     scoreElement = document.getElementById('score');
 
-    // Player and Controls
-    //Player Init
-
-  player = new Player.Player(lanes);
-  player.init();
-    player.setPosition(0, -1, 10);
-    scene.add(player.mesh);
 
     //Player Animations
     clock = new THREE.Clock();
@@ -108,7 +101,7 @@ function init() {
 
       model = gltf.scene;
       console.log('model position x: ' + model.position.x);
-
+      console.log('model position y: ' + model.position.y);
 
       scene.add( model );
       model.animations = gltf.animations;
@@ -141,6 +134,21 @@ function init() {
       actions = [ idleAction, runAction, jumpAction ];
 
       idleAction.play();
+      //idleAction.crossFadeTo(runAction, 5, false);
+      runAction.startAt(3);
+      runAction.play();
+
+        idleAction.fadeOut(10);
+
+      //runAction.fadeIn(1);
+      //idleAction.fadeOut(2);
+      //runAction.play();
+      //runAction.fadeIn(2);
+      //executeCrossFade(idleAction, runAction, 3);
+
+      //runAction.play();
+      //executeCrossFade(idleAction, runAction, 3);
+      //idleAction.fadeOut(2);
       modelReady = true;
       console.log('model ready: ' + modelReady);
       //activateAllActions();
@@ -154,7 +162,17 @@ function init() {
 
     } );
 
-    //model = new Player.Player(lanes);
+    // Player and Controls
+    //Player Init
+
+    player = new Player.Player(lanes);
+    //player.init();
+    if(modelReady == true)
+    {
+      player.setPosition(0, -1, 10, model);
+    }
+    scene.add(player.mesh);
+
 
     //Pause all actions
     function pauseAllActions()
@@ -187,7 +205,7 @@ function init() {
                 case 65: // a
                     if (TWEEN.getAll().length == 0){        //wait for current tween to complete to not allow double input
                         if (player.getLane() != 0) {        //do not move if already in left lane
-                            player.setLane(player.getLane() - 1);
+                            player.setLane(player.getLane() - 1, model);
                         }
                     }
                     break;
@@ -196,7 +214,7 @@ function init() {
             case 68: // d
                 if (TWEEN.getAll().length == 0){
                     if (player.getLane() != 2) {        //do not move if already in right lane
-                        player.setLane(player.getLane() + 1);
+                        player.setLane(player.getLane() + 1, model);
                     }
                 }
                 break;
@@ -205,16 +223,43 @@ function init() {
             case 87: // w
                 if (TWEEN.getAll().length == 0){
 
-                    player.jump(5);
-                    jumpAction.play();
-                    runAction.startAt(2);
+                    player.jump(2.6, model);
+                    //if (modelReady == true)
+                    //{
+                      //jumpAction.play();
+                      //jumpAction.weight = 1;
+                      //jumpAction.time = 0;
 
+                      // Crossfade with warping - you can also try without warping by setting the third parameter to false
+
+                      //runAction.crossFadeTo( jumpAction, 1, false );
+                      //executeCrossFade(runAction, jumpAction, 1);
+                      //runAction.pause = true;
+                      //runAction.fadeIn(5);
+                      //executeCrossFade(jumpAction, runAction, 1);
+                    //}
 
                 }
                 break;
             }
         }
     };
+
+    function executeCrossFade( startAction, endAction, duration )
+    {
+
+      // Not only the start action, but also the end action must get a weight of 1 before fading
+      // (concerning the start action this is already guaranteed in this place)
+
+      endAction.weight = 1;
+      startAction.weight = 1;
+      endAction.time = 0;
+
+      // Crossfade with warping - you can also try without warping by setting the third parameter to false
+
+      startAction.crossFadeTo( endAction, duration, true );
+
+    }
 
     document.addEventListener("keydown" , onKeyDown, false);
 
