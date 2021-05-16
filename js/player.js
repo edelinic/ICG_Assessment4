@@ -1,5 +1,4 @@
 import * as TweenHelper from './tween.helper.js';
-import * as FBXLoader from './FBXLoader.js';
 
 export class Player {
     constructor(lanes) {

@@ -110,8 +110,7 @@ function init() {
         if ( object.isMesh ) object.castShadow = true;
 
         object.lookAt(0,-1000,-50);
-        object.position.y = -0.45;
-        //object = new Player.Player(lanes);
+        object.position.y = -1.3;//-0.45;
 
 
       } );
@@ -120,7 +119,6 @@ function init() {
       skeleton.visible = false;
       scene.add( skeleton );
 
-      //createPanel();
 
       const animations = gltf.animations;
 
@@ -133,31 +131,12 @@ function init() {
 
       actions = [ idleAction, runAction, jumpAction ];
 
-      idleAction.play();
-      //idleAction.crossFadeTo(runAction, 5, false);
-      runAction.startAt(3);
       runAction.play();
 
-        idleAction.fadeOut(10);
 
-      //runAction.fadeIn(1);
-      //idleAction.fadeOut(2);
-      //runAction.play();
-      //runAction.fadeIn(2);
-      //executeCrossFade(idleAction, runAction, 3);
-
-      //runAction.play();
-      //executeCrossFade(idleAction, runAction, 3);
-      //idleAction.fadeOut(2);
       modelReady = true;
       console.log('model ready: ' + modelReady);
-      //activateAllActions();
-      //let mixerUpdateDelta = clock.getDelta();
 
-
-      //updates mixer to change animation
-      //mixer.update( mixerUpdateDelta );
-      //animate();
 
 
     } );
