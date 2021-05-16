@@ -281,11 +281,14 @@ function animate(timestamp) {
                 score.updateScore(100);
             }
         }
-    }
 
     //make cylinder (ground) rotate
     cylinder.rotation.x += 0.0005;
 
+	CheckForCollisions(model);
+
+    }
+    
 	renderer.render(scene, camera);
 
 
@@ -311,6 +314,57 @@ function onWindowResize() {
 	// Reset size
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+//Create a function to determine the colission
+function IsBetween(a1, a2, b){
+    var temp;
+if (a1 < a2){
+    temp = a1;
+    a1 = a2;
+    a2 = temp;
+}
+
+if (a1 <= b && b <= a2){
+    return true;
+} else {
+    return false;
+}
+
+}
+// For player collisions, breakdown the boundaries the mesh has.
+function CheckForCollisions(model){
+    var PlayerX0 = model.position.x - (1.5);
+    var PlayerX1 = model.position.x + (1.5);
+    var PlayerY0 = model.position.y - (1.5);
+    var PlayerY1 = model.position.y + (1.5);
+    var PlayerZ0 = model.position.z - (1.5);
+    var PlayerZ1 = model.position.z + (1.5);
+
+    //Loop through every object the player can collide with
+
+    for (let i = 0; i < obstacles.length; i++){
+        
+
+        var ObstacleX0 = obstacles[i].obstacle.position.x; //- (1.5)
+        var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
+        var ObstacleY0 = obstacles[i].obstacle.position.y;
+        var ObstacleY1 = obstacles[i].obstacle.position.y;
+        var ObstacleZ0 = obstacles[i].obstacle.position.z;
+        var ObstacleZ1 = obstacles[i].obstacle.position.z;
+
+
+                if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
+                (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
+                (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
+                {
+                    console.log("WOOOOO");
+                    //player.mesh.color = new THREE.color(1,1,1);
+                }
+
+            }
+        } 
+
+
 
 window.addEventListener('resize', onWindowResize, false);
 
