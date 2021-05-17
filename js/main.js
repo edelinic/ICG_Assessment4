@@ -26,12 +26,15 @@ var actions, settings;
 var modelReady = false;
 
 var isPaused = true;
+var isDead = false
+
+
 
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
     isPaused = false;
-});
+});  
 
 function init() {
 	// Init scene
@@ -88,7 +91,7 @@ function init() {
         scene.add(obstacles[i].init());
         console.log('currrentPosition: ' + obstacles[i].currentPosition());
     }
-
+    
     // Instantiate Score
     score = new Score.Score();
     scoreElement = document.getElementById('score');
@@ -270,6 +273,11 @@ function animate(timestamp) {
         }
 
     }
+
+    if (isDead) {
+        deathScreen();
+        pauseAllActions();
+    }
     
 	renderer.render(scene, camera);
 
@@ -294,22 +302,6 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-//Create a function to determine the collision
-function IsBetween(a1, a2, b) {
-    var temp;
-    if (a1 < a2){
-        temp = a1;
-        a1 = a2;
-        a2 = temp;
-    }
-
-    if (a1 <= b && b <= a2) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 // For player collisions, breakdown the boundaries the mesh has.
 function CheckForCollisions(model) {
     var PlayerX0 = model.position.x - (1.5);
@@ -320,27 +312,35 @@ function CheckForCollisions(model) {
     var PlayerZ1 = model.position.z + (1.5);
 
     //Loop through every object the player can collide with
-
     for (let i = 0; i < obstacles.length; i++){
         
         var ObstacleX0 = obstacles[i].obstacle.position.x; //- (1.5)
-        var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
+        //var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
         var ObstacleY0 = obstacles[i].obstacle.position.y;
-        var ObstacleY1 = obstacles[i].obstacle.position.y;
+        //var ObstacleY1 = obstacles[i].obstacle.position.y;
         var ObstacleZ0 = obstacles[i].obstacle.position.z;
-        var ObstacleZ1 = obstacles[i].obstacle.position.z;
+        //var ObstacleZ1 = obstacles[i].obstacle.position.z;
 
-
-        if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
-        (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
-        (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
+        if ((PlayerX0 < ObstacleX0) && (PlayerX1 > ObstacleX0) &&
+        (PlayerY0 < ObstacleY0) && (PlayerY1 > ObstacleY0) &&
+        (PlayerZ0 < ObstacleZ0) && (PlayerZ1 > ObstacleZ0))
         {
             console.log("WOOOOO");
+            isPaused = true;
+            isDead = true;
+        
             //player.mesh.color = new THREE.color(1,1,1);
         }
 
     }
 } 
+
+function deathScreen() {
+    if(!isPaused) {
+        pause();
+    }
+    document.getElementById('deathScreen').style.display = "flex";
+}
 
 //Pause all actions
 function pauseAllActions() {
@@ -378,6 +378,7 @@ document.getElementById('pause').addEventListener('click', function(el) {
 document.getElementById('play').addEventListener('click', function(el) {
     pause();
 }, false);
+   
 
 init();
 animate();
