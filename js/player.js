@@ -33,7 +33,7 @@ export class Player {
     setLane(targetLane) {
         var target = new THREE.Vector3(this.lanes[targetLane], this.mesh.position.y, this.mesh.position.z); // create on init
         TweenHelper.animateVector3(this.mesh.position, target, {
-            duration: 250
+            duration: 200
         });
         //change lane
         this.lane = targetLane;

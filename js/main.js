@@ -230,6 +230,7 @@ function CheckForCollisions(){
                 (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
                 {
                     console.log("WOOOOO");
+                    isPaused = true;
                     //player.mesh.color = new THREE.color(1,1,1);
                 }
 
