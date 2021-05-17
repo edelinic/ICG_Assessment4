@@ -152,28 +152,6 @@ function init() {
     }
     scene.add(player.mesh);
 
-
-    //Pause all actions
-    function pauseAllActions()
-    {
-      actions.forEach( function ( action )
-    {
-      action.paused = true;
-    } );
-  }
-
-  function unPauseAllActions()
-  {
-
-    actions.forEach( function ( action )
-    {
-      action.paused = false;
-    } );
-  }
-
-  //
-
-
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
 
@@ -189,38 +167,40 @@ function init() {
                     }
                     break;
 
-            case 39: // right
-            case 68: // d
-                if (TWEEN.getAll().length == 0){
-                    if (player.getLane() != 2) {        //do not move if already in right lane
-                        player.setLane(player.getLane() + 1, model);
+                case 39: // right
+                case 68: // d
+                    if (TWEEN.getAll().length == 0){
+                        if (player.getLane() != 2) {        //do not move if already in right lane
+                            player.setLane(player.getLane() + 1, model);
+                        }
                     }
+                    break;
+
+                case 38: //up
+                case 87: // w
+                    if (TWEEN.getAll().length == 0){
+                        player.jump(2.6, model);
+                        //if (modelReady == true)
+                        //{
+                        //jumpAction.play();
+                        //jumpAction.weight = 1;
+                        //jumpAction.time = 0;
+
+                        // Crossfade with warping - you can also try without warping by setting the third parameter to false
+
+                        //runAction.crossFadeTo( jumpAction, 1, false );
+                        //executeCrossFade(runAction, jumpAction, 1);
+                        //runAction.pause = true;
+                        //runAction.fadeIn(5);
+                        //executeCrossFade(jumpAction, runAction, 1);
+                        //}
+                    }
+                    break;
+
+                case 27: 
+                    pause();
+                    break;
                 }
-                break;
-
-            case 38: //up
-            case 87: // w
-                if (TWEEN.getAll().length == 0){
-
-                    player.jump(2.6, model);
-                    //if (modelReady == true)
-                    //{
-                      //jumpAction.play();
-                      //jumpAction.weight = 1;
-                      //jumpAction.time = 0;
-
-                      // Crossfade with warping - you can also try without warping by setting the third parameter to false
-
-                      //runAction.crossFadeTo( jumpAction, 1, false );
-                      //executeCrossFade(runAction, jumpAction, 1);
-                      //runAction.pause = true;
-                      //runAction.fadeIn(5);
-                      //executeCrossFade(jumpAction, runAction, 1);
-                    //}
-
-                }
-                break;
-            }
         }
     };
 
@@ -293,8 +273,6 @@ function animate(timestamp) {
     
 	renderer.render(scene, camera);
 
-
-
     requestAnimationFrame(animate);
 
     //updates mixer to change animations
@@ -305,7 +283,6 @@ function animate(timestamp) {
     }
 
     TWEEN.update();
-
 }
 
 function onWindowResize() {
@@ -317,24 +294,24 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-//Create a function to determine the colission
-function IsBetween(a1, a2, b){
+//Create a function to determine the collision
+function IsBetween(a1, a2, b) {
     var temp;
-if (a1 < a2){
-    temp = a1;
-    a1 = a2;
-    a2 = temp;
+    if (a1 < a2){
+        temp = a1;
+        a1 = a2;
+        a2 = temp;
+    }
+
+    if (a1 <= b && b <= a2) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
-if (a1 <= b && b <= a2){
-    return true;
-} else {
-    return false;
-}
-
-}
 // For player collisions, breakdown the boundaries the mesh has.
-function CheckForCollisions(model){
+function CheckForCollisions(model) {
     var PlayerX0 = model.position.x - (1.5);
     var PlayerX1 = model.position.x + (1.5);
     var PlayerY0 = model.position.y - (1.5);
@@ -346,7 +323,6 @@ function CheckForCollisions(model){
 
     for (let i = 0; i < obstacles.length; i++){
         
-
         var ObstacleX0 = obstacles[i].obstacle.position.x; //- (1.5)
         var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
         var ObstacleY0 = obstacles[i].obstacle.position.y;
@@ -355,31 +331,52 @@ function CheckForCollisions(model){
         var ObstacleZ1 = obstacles[i].obstacle.position.z;
 
 
-                if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
-                (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
-                (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
-                {
-                    console.log("WOOOOO");
-                    //player.mesh.color = new THREE.color(1,1,1);
-                }
+        if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
+        (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
+        (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
+        {
+            console.log("WOOOOO");
+            //player.mesh.color = new THREE.color(1,1,1);
+        }
 
-            }
-        } 
+    }
+} 
 
+//Pause all actions
+function pauseAllActions() {
+    actions.forEach( function ( action ) {
+        action.paused = true;
+    });
+}
 
+function unPauseAllActions() {
+    actions.forEach( function ( action ) {
+        action.paused = false;
+    });
+}
+
+function pause() {
+    if(isPaused) {
+        isPaused = false;
+        document.getElementById('play').style.display = "none";
+        document.getElementById('pause').style.display = "flex";
+        unPauseAllActions();
+    } else {
+        isPaused = true;
+        document.getElementById('pause').style.display = "none";
+        document.getElementById('play').style.display = "flex";
+        pauseAllActions();
+    }
+}
 
 window.addEventListener('resize', onWindowResize, false);
 
 document.getElementById('pause').addEventListener('click', function(el) {
-    isPaused = true;
-    document.getElementById('pause').style.display = "none";
-    document.getElementById('play').style.display = "flex";
+    pause();
 }, false);
 
 document.getElementById('play').addEventListener('click', function(el) {
-    isPaused = false;
-    document.getElementById('play').style.display = "none";
-    document.getElementById('pause').style.display = "flex";
+    pause();
 }, false);
 
 init();
