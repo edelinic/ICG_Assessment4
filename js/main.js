@@ -95,15 +95,15 @@ function init() {
     }
 
 
-    /*if (Death = true) {
-        document.getdocument.getElementsByTagName('Death-screen')
-        document.getElementsByTagName('Death-screen').style.display = "flex";
+    if (Death = true) {
+        document.getElementById('Death-Screen');
+        document.getElementById('Death-Screen').style.display = "flex";
         
     } else {
-        var x = document.getElementsByClassName('Death-screen');
+        var x = document.getElementByID('Death-screen');
         x.style.display = "none";
         }
-        */
+        
 
     
     // Instantiate Score
@@ -366,16 +366,16 @@ function CheckForCollisions(model){
         
 
         var ObstacleX0 = obstacles[i].obstacle.position.x; //- (1.5)
-        var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
+        //var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
         var ObstacleY0 = obstacles[i].obstacle.position.y;
-        var ObstacleY1 = obstacles[i].obstacle.position.y;
+        //var ObstacleY1 = obstacles[i].obstacle.position.y;
         var ObstacleZ0 = obstacles[i].obstacle.position.z;
-        var ObstacleZ1 = obstacles[i].obstacle.position.z;
+        //var ObstacleZ1 = obstacles[i].obstacle.position.z;
 
 
-                if ((PlayerX0 < ObstacleX1) && (PlayerX1 > ObstacleX0) &&
-                (PlayerY0 < ObstacleY1) && (PlayerY1 > ObstacleY0) &&
-                (PlayerZ0 < ObstacleZ1) && (PlayerZ1 > ObstacleZ0))
+                if ((PlayerX0 < ObstacleX0) && (PlayerX1 > ObstacleX0) &&
+                (PlayerY0 < ObstacleY0) && (PlayerY1 > ObstacleY0) &&
+                (PlayerZ0 < ObstacleZ0) && (PlayerZ1 > ObstacleZ0))
                 {
                     console.log("WOOOOO");
                     isPaused = true;
