@@ -26,12 +26,15 @@ var actions, settings;
 var modelReady = false;
 
 var isPaused = true;
+var Death = false
 
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
     isPaused = false;
 });
+
+     
 
 function init() {
 	// Init scene
@@ -315,8 +318,8 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-//Create a function to determine the colission
-function IsBetween(a1, a2, b){
+//Create a function to determine the colission ** No longer needed**
+/*function IsBetween(a1, a2, b){
     var temp;
 if (a1 < a2){
     temp = a1;
@@ -329,8 +332,9 @@ if (a1 <= b && b <= a2){
 } else {
     return false;
 }
+}*/
 
-}
+
 // For player collisions, breakdown the boundaries the mesh has.
 function CheckForCollisions(model){
     var PlayerX0 = model.position.x - (1.5);
@@ -359,6 +363,9 @@ function CheckForCollisions(model){
                 {
                     console.log("WOOOOO");
                     isPaused = true;
+                    
+                    
+
                     //player.mesh.color = new THREE.color(1,1,1);
                 }
 
@@ -375,11 +382,24 @@ document.getElementById('pause').addEventListener('click', function(el) {
     document.getElementById('play').style.display = "flex";
 }, false);
 
+document.getElementById('pause').addEventListener('onkeydown', function(el) {
+    isPaused = true;
+    document.getElementById('pause').style.display = "none";
+    document.getElementById('play').style.display = "flex";
+}, false);
+
 document.getElementById('play').addEventListener('click', function(el) {
     isPaused = false;
     document.getElementById('play').style.display = "none";
     document.getElementById('pause').style.display = "flex";
 }, false);
+
+/*document.getElementById('death').addEventListener('click', function(){
+    document.querySelector('.Death-screen').style.display = 'flex';
+    Death = true;
+    
+}); */
+   
 
 init();
 animate();
