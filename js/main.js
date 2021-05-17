@@ -63,7 +63,7 @@ function init() {
 
     var material_floor = new THREE.MeshLambertMaterial();           //material
     material_floor.color= new THREE.Color(0.8,0.8,1.0);
-    var dirt_texture = new THREE.TextureLoader().load('resources/dirt.jpg')
+    var dirt_texture = new THREE.TextureLoader().load('resources/sand.jpg')
 
     dirt_texture.wrapS = THREE.RepeatWrapping;                      //texture
     dirt_texture.wrapT = THREE.RepeatWrapping;
