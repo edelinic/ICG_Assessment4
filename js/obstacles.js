@@ -61,7 +61,7 @@ export class Obstacle {
     enterScene(lane = 0) {
         if(this.onScreen != true) {
             this.obstacle.position.x = lanes[lane];
-            this.obstacle.position.y = -1;
+            this.obstacle.position.y = -2;
             this.obstacle.position.z = -55;
             this.onScreen = true;
             console.log(this.index + ' has entered the scene in lane: ' + lane);

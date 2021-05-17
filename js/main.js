@@ -285,10 +285,12 @@ function animate(timestamp) {
             }
         }
 
-    //make cylinder (ground) rotate
-    cylinder.rotation.x += 0.0005;
+        //make cylinder (ground) rotate
+        cylinder.rotation.x += 0.00035;
 
-	CheckForCollisions(model);
+        if(modelReady) { 
+            CheckForCollisions(model);
+        }
 
     }
     
