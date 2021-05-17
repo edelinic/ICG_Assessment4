@@ -119,21 +119,21 @@ a#startGame {
     display: inline-block;
 }
 
-.Death-screen {
+#Death-screen {
     width : 100%;
     height : 100%;
     background-color: rgba(0,0,0,0.5);
     opacity : 0.5;
     position : absolute;
     top : 0;
-    display: flex;
+    display: flex; 
     justify-content: center;
     align-items: center;
     display : none;
     
 }
 
-.Death-content{
+#Death-content{
     width : 200px;
     height: 100px;
     background-color: white;

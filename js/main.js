@@ -28,6 +28,8 @@ var modelReady = false;
 var isPaused = true;
 var Death = false
 
+
+
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
@@ -92,6 +94,18 @@ function init() {
         console.log('currrentPosition: ' + obstacles[i].currentPosition());
     }
 
+
+    /*if (Death = true) {
+        document.getdocument.getElementsByTagName('Death-screen')
+        document.getElementsByTagName('Death-screen').style.display = "flex";
+        
+    } else {
+        var x = document.getElementsByClassName('Death-screen');
+        x.style.display = "none";
+        }
+        */
+
+    
     // Instantiate Score
     score = new Score.Score();
     scoreElement = document.getElementById('score');
@@ -365,7 +379,7 @@ function CheckForCollisions(model){
                 {
                     console.log("WOOOOO");
                     isPaused = true;
-                    
+                    Death = true;
                     
 
                     //player.mesh.color = new THREE.color(1,1,1);
@@ -384,6 +398,7 @@ document.getElementById('pause').addEventListener('click', function(el) {
     document.getElementById('play').style.display = "flex";
 }, false);
 
+// Not yet in use
 document.getElementById('pause').addEventListener('onkeydown', function(el) {
     isPaused = true;
     document.getElementById('pause').style.display = "none";
