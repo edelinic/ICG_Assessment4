@@ -28,8 +28,6 @@ var modelReady = false;
 var isPaused = true;
 var isDead = false
 
-
-
 document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
@@ -139,8 +137,6 @@ function init() {
 
       modelReady = true;
       console.log('model ready: ' + modelReady);
-
-
 
     } );
 
@@ -340,9 +336,12 @@ function deathScreen() {
         pause();
     }
     document.getElementById('deathScreen').style.display = "flex";
-    scoreElement = document.getElementById('score').getScore
-    
+    scoreElement = document.getElementById('score').getScore 
 }
+
+document.getElementById('restartGame').addEventListener('click', function(event) {
+    window.location.reload();
+});
 
 //Pause all actions
 function pauseAllActions() {
