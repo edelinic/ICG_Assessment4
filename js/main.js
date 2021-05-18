@@ -34,7 +34,7 @@ document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
     isPaused = false;
-});  
+});
 
 function init() {
 	// Init scene
@@ -66,14 +66,21 @@ function init() {
 
     var material_floor = new THREE.MeshLambertMaterial();           //material
     material_floor.color= new THREE.Color(0.8,0.8,1.0);
-    var dirt_texture = new THREE.TextureLoader().load('resources/sand.jpg')
+    var sand_texture = new THREE.TextureLoader().load('resources/sand.jpg')
 
-    dirt_texture.wrapS = THREE.RepeatWrapping;                      //texture
-    dirt_texture.wrapT = THREE.RepeatWrapping;
+    sand_texture.wrapS = THREE.RepeatWrapping;                      //texture
+    sand_texture.wrapT = THREE.RepeatWrapping;
     const timesToRepeatHorizontally = 100;
     const timesToRepeatVertically = 15;
-    dirt_texture.repeat.set(timesToRepeatHorizontally, timesToRepeatVertically);
-    material_floor.map = dirt_texture;
+    sand_texture.repeat.set(timesToRepeatHorizontally, timesToRepeatVertically);
+    material_floor.map = sand_texture;
+    var sandnormalMap = new THREE.TextureLoader().load('resources/SandNormal1.png');
+    material_floor.normalMap = sandnormalMap;
+    sandnormalMap.wrapS = THREE.RepeatWrapping;
+    sandnormalMap.wrapT = THREE.RepeatWrapping;
+    sandnormalMap.repeat.set(timesToRepeatHorizontally, timesToRepeatVertically);
+
+
 
     var cylinder_radius = 1700;                                       //create cylinder
     var ground_offset = -4 //where the ground is for the cubes
@@ -91,7 +98,7 @@ function init() {
         scene.add(obstacles[i].init());
         console.log('currrentPosition: ' + obstacles[i].currentPosition());
     }
-    
+
     // Instantiate Score
     score = new Score.Score();
     scoreElement = document.getElementById('score');
@@ -200,7 +207,7 @@ function init() {
                     }
                     break;
 
-                case 27: 
+                case 27:
                     pause();
                     break;
                 }
@@ -268,7 +275,7 @@ function animate(timestamp) {
         //make cylinder (ground) rotate
         cylinder.rotation.x += 0.00035;
 
-        if(modelReady) { 
+        if(modelReady) {
             CheckForCollisions(model);
         }
 
@@ -278,7 +285,7 @@ function animate(timestamp) {
         deathScreen();
         pauseAllActions();
     }
-    
+
 	renderer.render(scene, camera);
 
     requestAnimationFrame(animate);
@@ -313,7 +320,7 @@ function CheckForCollisions(model) {
 
     //Loop through every object the player can collide with
     for (let i = 0; i < obstacles.length; i++){
-        
+
         var ObstacleX0 = obstacles[i].obstacle.position.x; //- (1.5)
         //var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
         var ObstacleY0 = obstacles[i].obstacle.position.y;
@@ -328,12 +335,12 @@ function CheckForCollisions(model) {
             console.log("WOOOOO");
             isPaused = true;
             isDead = true;
-        
+
             //player.mesh.color = new THREE.color(1,1,1);
         }
 
     }
-} 
+}
 
 function deathScreen() {
     if(!isPaused) {
@@ -341,7 +348,7 @@ function deathScreen() {
     }
     document.getElementById('deathScreen').style.display = "flex";
     scoreElement = document.getElementById('score').getScore
-    
+
 }
 
 //Pause all actions
@@ -380,7 +387,7 @@ document.getElementById('pause').addEventListener('click', function(el) {
 document.getElementById('play').addEventListener('click', function(el) {
     pause();
 }, false);
-   
+
 
 init();
 animate();
