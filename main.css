@@ -97,8 +97,9 @@ body {
 }
 
 .container {
-    max-width: 80%;
-    width: 520px;
+
+    width: 100%;
+    height : 100%
 }
 
 h1 {
@@ -116,8 +117,29 @@ a#startGame {
     padding: 1em 1.5em;
     border-radius: 3px;
     background: white;
-    display: inline-block;
+    position : absolute;
+
+
 }
+
+.container .btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 900%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  
+}
+.container .btn:hover {
+    background-color: rgba(0, 0, 0, 0.26);
+  }
 
 #deathScreen {
     width : 100%;
@@ -132,8 +154,9 @@ a#startGame {
     display : none;
 }
 
-#deathContent{
-    width : 200px;
-    height: 100px;
+a#deathContent{
+    width : 300px;
+    height: 200px;
     background-color: white; 
+    align-items: center;
 }

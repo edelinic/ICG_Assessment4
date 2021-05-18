@@ -340,6 +340,8 @@ function deathScreen() {
         pause();
     }
     document.getElementById('deathScreen').style.display = "flex";
+    scoreElement = document.getElementById('score').getScore
+    
 }
 
 //Pause all actions
