@@ -41,10 +41,9 @@ export class Obstacle {
             
             if(this.obstacle.position.z > 15) {
                 this.remove();
-                if (speed < 0.1){
-                    speed = speed + 0.008;
-                console.log("Speed has been increased! " + speed);
-                
+                    if (speed < 1.2){
+                        speed = speed + 0.008;
+                    console.log("Speed has been increased! " + speed);
             }
                 return true;
             }
