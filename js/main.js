@@ -21,7 +21,7 @@ var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
 var cylinder;
 var model, skeleton, mixer, clock, mixerUpdateDelta;
-var idleAction, runAction, jumpAction, currentAction;
+var idleAction, runAction, jumpAction, deathAction, currentAction;
 var actions, settings;
 var modelReady = false;
 
@@ -126,13 +126,15 @@ function init() {
       mixer = new THREE.AnimationMixer( model );
 
 
-      idleAction = mixer.clipAction( animations[ 1 ] );
-      runAction = mixer.clipAction( animations[ 2 ] );
+      idleAction = mixer.clipAction( animations[ 2 ] );
+      runAction = mixer.clipAction( animations[ 1 ] );
       jumpAction = mixer.clipAction( animations[ 0 ] );
+      deathAction = mixer.clipAction( animations[ 3 ] );
 
       actions = [ idleAction, runAction, jumpAction ];
       //jumpAction.setLoop(THREE.LoopOnce);
       runAction.play();
+      deathAction.setLoop( THREE.LoopOnce );
       currentAction = runAction;
 
 
@@ -291,6 +293,10 @@ function animate(timestamp) {
     if (isDead) {
         deathScreen();
         pauseAllActions();
+        deathAction.play();
+        setTimeout(function() {scene.remove(model);}, 1000);
+
+
     }
 
 	renderer.render(scene, camera);
