@@ -21,7 +21,7 @@ var laneWidth = 5;
 var lanes = [-laneWidth, 0, laneWidth]; //coord of lanes
 var cylinder;
 var model, skeleton, mixer, clock, mixerUpdateDelta;
-var idleAction, runAction, jumpAction;
+var idleAction, runAction, jumpAction, currentAction;
 var actions, settings;
 var modelReady = false;
 
@@ -32,7 +32,7 @@ document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
     isPaused = false;
-});  
+});
 
 function init() {
 	// Init scene
@@ -89,7 +89,7 @@ function init() {
         scene.add(obstacles[i].init());
         console.log('currrentPosition: ' + obstacles[i].currentPosition());
     }
-    
+
     // Instantiate Score
     score = new Score.Score();
     scoreElement = document.getElementById('score');
@@ -98,7 +98,7 @@ function init() {
     //Player Animations
     clock = new THREE.Clock();
     const gltfloader = new THREE.GLTFLoader();
-    gltfloader.load( 'models/RemyAnimated02.glb', function ( gltf ) {
+    gltfloader.load( 'models/RemyFixedAnimations1.glb', function ( gltf ) {
 
       model = gltf.scene;
       console.log('model position x: ' + model.position.x);
@@ -126,13 +126,14 @@ function init() {
       mixer = new THREE.AnimationMixer( model );
 
 
-      idleAction = mixer.clipAction( animations[ 0 ] );
-      runAction = mixer.clipAction( animations[ 1 ] );
-      jumpAction = mixer.clipAction( animations[ 3 ] );
+      idleAction = mixer.clipAction( animations[ 1 ] );
+      runAction = mixer.clipAction( animations[ 2 ] );
+      jumpAction = mixer.clipAction( animations[ 0 ] );
 
       actions = [ idleAction, runAction, jumpAction ];
-
+      //jumpAction.setLoop(THREE.LoopOnce);
       runAction.play();
+      currentAction = runAction;
 
 
       modelReady = true;
@@ -179,29 +180,46 @@ function init() {
                 case 87: // w
                     if (TWEEN.getAll().length == 0){
                         player.jump(2.6, model);
-                        //if (modelReady == true)
-                        //{
-                        //jumpAction.play();
-                        //jumpAction.weight = 1;
-                        //jumpAction.time = 0;
 
-                        // Crossfade with warping - you can also try without warping by setting the third parameter to false
+                        jumpAction.play();
+                        //runAction.crossFadeTo(jumpAction,1);
+                        //
+                        jumpAction.fadeOut(1);
+                        //runAction.reset();
+                        jumpAction.reset();
+                        jumpAction.crossFadeTo(runAction,1);
 
-                        //runAction.crossFadeTo( jumpAction, 1, false );
-                        //executeCrossFade(runAction, jumpAction, 1);
-                        //runAction.pause = true;
-                        //runAction.fadeIn(5);
-                        //executeCrossFade(jumpAction, runAction, 1);
-                        //}
+
                     }
                     break;
 
-                case 27: 
+                case 27:
                     pause();
                     break;
                 }
         }
     };
+
+    function set_motion(_name){
+        if (currentAction == _name){ return; }
+        currentAction = _name;
+        let motion_time = Date.now();
+
+        //get action (animation)
+        var action = _name;
+        console.log("action,");
+        console.log(action);
+        if(currentAction){
+          currentAction.fadeOut(0.2);
+        }
+
+        //this.mixer.stopAllAction();
+        action.reset();
+        action.fadeIn(0.2);
+        action.play();
+        //action.time = 0.1; //hmm doesn't do anything
+        currentAction = action;
+      }
 
     function executeCrossFade( startAction, endAction, duration )
     {
@@ -264,7 +282,7 @@ function animate(timestamp) {
         //make cylinder (ground) rotate
         cylinder.rotation.x += 0.00035;
 
-        if(modelReady) { 
+        if(modelReady) {
             CheckForCollisions(model);
         }
 
@@ -274,7 +292,7 @@ function animate(timestamp) {
         deathScreen();
         pauseAllActions();
     }
-    
+
 	renderer.render(scene, camera);
 
     requestAnimationFrame(animate);
@@ -309,7 +327,7 @@ function CheckForCollisions(model) {
 
     //Loop through every object the player can collide with
     for (let i = 0; i < obstacles.length; i++){
-        
+
         var ObstacleX0 = obstacles[i].obstacle.position.x; //- (1.5)
         //var ObstacleX1 = obstacles[i].obstacle.position.x; //+ (1.5)
         var ObstacleY0 = obstacles[i].obstacle.position.y;
@@ -324,19 +342,19 @@ function CheckForCollisions(model) {
             console.log("WOOOOO");
             isPaused = true;
             isDead = true;
-        
+
             //player.mesh.color = new THREE.color(1,1,1);
         }
 
     }
-} 
+}
 
 function deathScreen() {
     if(!isPaused) {
         pause();
     }
     document.getElementById('deathScreen').style.display = "flex";
-    scoreElement = document.getElementById('score').getScore 
+    scoreElement = document.getElementById('score').getScore
 }
 
 document.getElementById('restartGame').addEventListener('click', function(event) {
@@ -379,7 +397,7 @@ document.getElementById('pause').addEventListener('click', function(el) {
 document.getElementById('play').addEventListener('click', function(el) {
     pause();
 }, false);
-   
+
 
 init();
 animate();
