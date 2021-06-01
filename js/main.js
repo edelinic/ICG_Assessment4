@@ -153,8 +153,9 @@ function init() {
     if(modelReady == true)
     {
       player.setPosition(0, -1, 10, model);
+      scene.add(player.mesh);
     }
-    scene.add(player.mesh);
+
 
     //add Event Listener for Keys
     var onKeyDown = function ( event ) {
@@ -263,7 +264,7 @@ function init() {
 function animate(timestamp) {
     if(!isPaused) {
         scoreElement.innerHTML = score.getScore();
-        
+
 
         let timeInSeconds = timestamp / 1000;
         if (timeInSeconds - timer >= rowSpeed) {
@@ -282,7 +283,7 @@ function animate(timestamp) {
                 score.updateScore(100);
             }
         }
-        
+
         //make cylinder (ground) rotate
         cylinder.rotation.x += 0.00035;
 
@@ -290,7 +291,7 @@ function animate(timestamp) {
             CheckForCollisions(model);
         }
 
-     
+
     }
 
     if (isDead) {
