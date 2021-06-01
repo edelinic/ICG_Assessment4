@@ -32,6 +32,8 @@ document.getElementById('startGame').addEventListener('click', function(event) {
     event.preventDefault();
     document.getElementById('startMenu').style.display = "none";
     isPaused = false;
+    document.getElementById("audio").muted = false;
+    document.getElementById("audio").play();
 });
 
 function init() {
@@ -349,6 +351,7 @@ function CheckForCollisions(model) {
             console.log("WOOOOO");
             isPaused = true;
             isDead = true;
+            document.getElementById("audio").muted = true;
 
             //player.mesh.color = new THREE.color(1,1,1);
         }
