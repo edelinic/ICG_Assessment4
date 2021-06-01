@@ -85,7 +85,6 @@ function init() {
     scene.add(cylinder);
 
     // Create obstacles
-    //scene.add(Obstacles.init(0));
     for(var i = 0; i < obstacleCount; i++) {
         obstacles[i] = new Obstacles.Obstacle(i);
         scene.add(obstacles[i].init());
@@ -146,7 +145,6 @@ function init() {
     } );
 
     // Player and Controls
-    //Player Init
 
     player = new Player.Player(lanes);
     //player.init();
@@ -185,16 +183,10 @@ function init() {
                 case 87: // w
                     if (TWEEN.getAll().length == 0){
                         player.jump(2.6, model);
-
                         jumpAction.play();
-                        //runAction.crossFadeTo(jumpAction,1);
-                        //
                         jumpAction.fadeOut(1);
-                        //runAction.reset();
                         jumpAction.reset();
                         jumpAction.crossFadeTo(runAction,1);
-
-
                     }
                     break;
 
@@ -204,43 +196,6 @@ function init() {
                 }
         }
     };
-
-    function set_motion(_name){
-        if (currentAction == _name){ return; }
-        currentAction = _name;
-        let motion_time = Date.now();
-
-        //get action (animation)
-        var action = _name;
-        console.log("action,");
-        console.log(action);
-        if(currentAction){
-          currentAction.fadeOut(0.2);
-        }
-
-        //this.mixer.stopAllAction();
-        action.reset();
-        action.fadeIn(0.2);
-        action.play();
-        //action.time = 0.1; //hmm doesn't do anything
-        currentAction = action;
-      }
-
-    function executeCrossFade( startAction, endAction, duration )
-    {
-
-      // Not only the start action, but also the end action must get a weight of 1 before fading
-      // (concerning the start action this is already guaranteed in this place)
-
-      endAction.weight = 1;
-      startAction.weight = 1;
-      endAction.time = 0;
-
-      // Crossfade with warping - you can also try without warping by setting the third parameter to false
-
-      startAction.crossFadeTo( endAction, duration, true );
-
-    }
 
     document.addEventListener("keydown" , onKeyDown, false);
 
@@ -256,7 +211,7 @@ function init() {
 	scene.add(camera);
 
 	// Position camera
-	camera.position.z = 7; //original position 15
+	camera.position.z = 7;
     camera.position.y = 3;
 }
 
@@ -271,7 +226,6 @@ function animate(timestamp) {
             timer = timeInSeconds;
             var spawner = Obstacles.setRow(currentIndex, obstacleCount, 3);
             for(var j = 0; j < spawner.length; j++) {
-                //console.log(spawner[j][0] + ' --- index: ' + spawner[j][0][0] + ', lane: ' + spawner[j][0][1]);
                 currentIndex = spawner[j][0][0] + 1;
                 if(currentIndex > obstacleCount - 1) { currentIndex = 0; }
                 obstacles[currentIndex].enterScene(spawner[j][0][1]);
@@ -299,8 +253,6 @@ function animate(timestamp) {
         pauseAllActions();
         deathAction.play();
         setTimeout(function() {scene.remove(model);}, 1000);
-
-
     }
 
 	renderer.render(scene, camera);
@@ -353,8 +305,6 @@ function CheckForCollisions(model) {
             isPaused = true;
             isDead = true;
             document.getElementById("audio").muted = true;
-
-            //player.mesh.color = new THREE.color(1,1,1);
         }
 
     }

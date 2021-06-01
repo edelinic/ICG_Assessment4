@@ -13,10 +13,8 @@ export class Obstacle {
         this.onScreen = onScreen;
     }
 
-     
-
     init() {
-        
+
         // Init BoxGeometry object (rectangular cuboid)
         const obstacleGeometry = new THREE.BoxGeometry(3, 3, 3);
         // Create material with color
@@ -31,14 +29,13 @@ export class Obstacle {
         this.onScreen = true;
         this.remove();
         return this.obstacle;
-        
     }
 
     animate() {
-        
+
         if(this.isOnScreen()) {
             this.obstacle.position.z += speed;
-            
+
             if(this.obstacle.position.z > 15) {
                 this.remove();
                     if (speed < 1.2){
@@ -47,19 +44,10 @@ export class Obstacle {
             }
                 return true;
             }
-            
+
         }
     }
-    /** Not using anymore, buggy (was using with a setInterval) 
-    SpeedIncrease(){
-        //if(Main.GetScore > 500){
 
-       
-        speed = speed + 0.1;
-        console.log("Speed increased"); 
-        //}
-     }*/
-    
 
     setPosition(x, y, z) {
         this.obstacle.position.x = x;
@@ -105,7 +93,7 @@ export class Obstacle {
         return this.obstacle.x;
     }
 }
-    
+
 
 export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
     var data = [];
@@ -119,8 +107,6 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
             lanesTaken.push(lane);
         }
     }
-
-    //console.log("--------rows created: " + amountOfObstacles);
     for(var i = 0; i < amountOfObstacles; i++) {
         var entry = [];
 
@@ -134,7 +120,6 @@ export function setRow(currentIndex, maxObstacleIndex, maxPerRow) {
 
         entry.push(newIndex, lane);
         data.push([entry]);
-        //console.log("currentIndex: " + newIndex + " lane: " + lane);
     }
     return data;
 }
